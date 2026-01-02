@@ -1,8 +1,9 @@
+import HeroBackground from "./HeroBackground"
 
 function Hero() {
   return (
-    <div>
-      Hero
+    <div className="relative h-screen w-full">
+      <HeroBackground />
     </div>
   )
 }

@@ -9,7 +9,7 @@ export default function MainLayout() {
     <div className="min-h-screen  flex flex-col">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 grow">
+      <main className=" max-w-7xl grow">
         <Outlet />
       </main>
      <section className="bg-section-background">
