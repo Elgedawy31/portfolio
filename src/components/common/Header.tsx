@@ -1,5 +1,4 @@
-
-import { Motion } from "../../../src/motion/Motion";
+import { Motion } from "@/motion/Motion";
 import { DotsGridSVG } from '../ui';
 
 function Header() {

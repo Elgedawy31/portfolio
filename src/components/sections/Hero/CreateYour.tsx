@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
-import { Motion } from "../../../motion/Motion";
-import CreateYourSVG from "../../../assets/banner/create-your.svg";
+import { Motion } from "@/motion/Motion";
+import CreateYourSVG from "@/assets/banner/create-your.svg";
 
 function CreateYour() {
   const [animateImage, setAnimateImage] = useState(false);

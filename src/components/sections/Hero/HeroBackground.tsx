@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Motion } from "../../../motion/Motion";
+import { Motion } from "@/motion/Motion";
 
 function HeroBackground() {
   const [showBackground, setShowBackground] = useState(true);
