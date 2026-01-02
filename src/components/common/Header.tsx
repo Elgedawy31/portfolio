@@ -1,7 +1,7 @@
 
 function Header() {
   return (
-    <div>
+    <div className="p-4">
       Header
     </div>
   )
