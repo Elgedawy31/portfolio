@@ -1,4 +1,47 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../assets/fonts/Urbanist-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../assets/fonts/Urbanist-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../assets/fonts/Urbanist-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../assets/fonts/Urbanist-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../assets/fonts/Urbanist-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../assets/fonts/Urbanist-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+}
+
 @theme {
   --color-background: #111111;
   --color-foreground: #ffffff;
@@ -22,6 +65,7 @@
 @layer base {
   body {
     @apply bg-background text-foreground antialiased;
+    font-family: 'Urbanist', sans-serif;
   }
 }
 
