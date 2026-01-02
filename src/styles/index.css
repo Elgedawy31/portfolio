@@ -1,0 +1,40 @@
+@import "tailwindcss";
+/* ================================
+   TAILWIND THEME TOKENS
+================================ */
+@theme {
+  /* Backgrounds */
+  --color-primary: hsl(0 0% 3%);
+  --color-secondary: hsl(0 0% 7%);
+  --color-card: hsl(0 0% 10%);
+
+  /* Text */
+  --color-foreground: hsl(0 0% 96%);
+  --color-muted: hsl(0 0% 70%);
+  --color-subtle: hsl(0 0% 55%);
+
+  /* Brand */
+  --color-brand: hsl(195 100% 50%);
+
+  /* Border */
+  --color-border: hsl(0 0% 18%);
+
+  /* Radius */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+}
+
+/* ================================
+   BASE STYLES
+================================ */
+@layer base {
+  body {
+    @apply bg-primary text-foreground antialiased;
+  }
+}
+
+html{
+  scroll-behavior: smooth;
+  
+}
