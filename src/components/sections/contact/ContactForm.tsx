@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { EmailIcon } from '../../icons'; // Assuming EmailIcon is needed for the upload button
+import { EmailIcon, Send } from '../../icons'; // Assuming EmailIcon is needed for the upload button
 
 // Install @hookform/resolvers for zod integration
 // bun add @hookform/resolvers
@@ -39,65 +39,68 @@ const ContactForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
-        <label htmlFor="name" className="block text-section-text text-sm font-bold mb-2">Your name</label>
-        <input
-          id="name"
-          type="text"
-          {...register('name')}
-          className="shadow appearance-none border rounded w-full py-3 px-4 text-section-text placeholder-placeholder leading-tight focus:outline-none focus:shadow-outline bg-input-background border-none"
-          placeholder="Write Your name"
-          aria-invalid={errors.name ? "true" : "false"}
-        />
-        {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
-      </div>
+    <div className="bg-section-background bg-[url('/src/assets/backgrounds/contact-bg.svg')] bg-repeat rounded-lg p-8 space-y-4">
+      <h3 className="text-2xl font-bold text-section-text mb-4">SAY HELLO!</h3>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div>
+          <label htmlFor="name" className="block text-section-text text-sm font-bold mb-2">Your name</label>
+          <input
+            id="name"
+            type="text"
+            {...register('name')}
+            className="shadow appearance-none border rounded w-full py-3 px-4 text-section-text placeholder-placeholder leading-tight focus:outline-none focus:shadow-outline bg-input-background border-none"
+            placeholder="Write Your name"
+            aria-invalid={errors.name ? "true" : "false"}
+          />
+          {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+        </div>
 
-      <div>
-        <label htmlFor="email" className="block text-section-text text-sm font-bold mb-2">Your Email ID</label>
-        <input
-          id="email"
-          type="email"
-          {...register('email')}
-          className="shadow appearance-none border rounded w-full py-3 px-4 text-section-text placeholder-placeholder leading-tight focus:outline-none focus:shadow-outline bg-input-background border-none"
-          placeholder="Write Your Email"
-          aria-invalid={errors.email ? "true" : "false"}
-        />
-        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
-      </div>
+        <div>
+          <label htmlFor="email" className="block text-section-text text-sm font-bold mb-2">Your Email ID</label>
+          <input
+            id="email"
+            type="email"
+            {...register('email')}
+            className="shadow appearance-none border rounded w-full py-3 px-4 text-section-text placeholder-placeholder leading-tight focus:outline-none focus:shadow-outline bg-input-background border-none"
+            placeholder="Write Your Email"
+            aria-invalid={errors.email ? "true" : "false"}
+          />
+          {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+        </div>
 
-      <div>
-        <label htmlFor="message" className="block text-section-text text-sm font-bold mb-2">Write your message here...</label>
-        <div className="relative">
-          <textarea
-            id="message"
-            {...register('message')}
-            rows={4}
-            className="shadow appearance-none border rounded-t w-full py-3 px-4 text-section-text placeholder-placeholder leading-tight focus:outline-none focus:shadow-outline bg-input-background border-none resize-none"
-            placeholder="Write your message here..."
-            aria-invalid={errors.message ? "true" : "false"}
-          ></textarea>
-          <div className="flex justify-between items-center bg-input-background rounded-b p-3 border-t border-gray-700">
-            <label htmlFor="file-upload" className="flex items-center space-x-2 cursor-pointer text-muted">
-              <EmailIcon /> {/* Using EmailIcon as a placeholder for file upload icon */}
-              <span>{fileName ? fileName : 'Upload File'}</span>
-              <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} />
-            </label>
-            <div className="flex items-center space-x-2">
-              <span className="text-muted">0 / 250</span> {/* Character count placeholder */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="bg-brand text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
-              >
-                Say Hello
-              </button>
+        <div>
+          <label htmlFor="message" className="block text-section-text text-sm font-bold mb-2">Write your message here...</label>
+          <div className="relative">
+            <textarea
+              id="message"
+              {...register('message')}
+              rows={4}
+              className="shadow appearance-none border rounded-t w-full py-3 px-4 text-section-text placeholder-placeholder leading-tight focus:outline-none focus:shadow-outline bg-input-background border-none resize-none"
+              placeholder="Write your message here..."
+              aria-invalid={errors.message ? "true" : "false"}
+            ></textarea>
+            <div className="flex justify-between items-center bg-input-background rounded-b p-3 border-t border-gray-700">
+              <label htmlFor="file-upload" className="flex items-center space-x-2 cursor-pointer text-muted">
+                <EmailIcon /> {/* Using EmailIcon as a placeholder for file upload icon */}
+                <span>{fileName ? fileName : 'Upload File'}</span>
+                <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} />
+              </label>
+              <div className="flex items-center space-x-2">
+                <span className="text-muted">0 / 250</span> {/* Character count placeholder */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-brand focus:outline-none focus:shadow-outline disabled:opacity-50"
+                >
+                  <Send className="w-5 h-5 text-white" />
+                </button>
+              </div>
             </div>
           </div>
+          {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
         </div>
-        {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
