@@ -19,7 +19,7 @@ const DecorativeTextBackground: React.FC<DecorativeTextBackgroundProps> = ({
         opacity,
         color: 'var(--color-section-text)',
         fontSize: 'clamp(8rem, 20vw, 20rem)',
-        fontWeight: 'bold',
+        fontWeight: '800',
         textTransform: 'uppercase',
         lineHeight: '0.8',
       }}
