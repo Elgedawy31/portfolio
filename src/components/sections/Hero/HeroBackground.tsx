@@ -8,7 +8,7 @@ function HeroBackground() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowBackground(false);
-    }, 1000);
+    }, 1200);
     return () => clearTimeout(timer);
   }, []);
 
