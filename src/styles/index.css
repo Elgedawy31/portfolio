@@ -69,6 +69,14 @@
   }
 }
 
+.text-brand-primary {
+  background-image: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent; /* Fallback for browsers that don't support background-clip: text */
+}
+
 html{
   scroll-behavior: smooth;
   

@@ -87,7 +87,7 @@ const ContactForm: React.FC = () => {
                 <input id="file-upload" type="file" className="hidden" onChange={handleFileChange} />
               </label>
               <div className="flex items-center space-x-3">
-                <span className="text-muted text-sm">{charCount} / 250</span>
+                <span className="text-sm text-foreground"><span className="text-brand-primary">{charCount}</span> / 250</span>
                 <button
                   type="submit"
                   disabled={isSubmitting}
