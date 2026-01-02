@@ -4,7 +4,7 @@ import { Facebook, Linkedin, Github } from '../icons';
 
 function Footer() {
   return (
-    <footer className="bg-background py-8 text-footer-text flex flex-col items-center justify-center space-y-4">
+    <footer className="py-8 text-footer-text flex flex-col items-center justify-center space-y-4">
       <div className="flex space-x-6">
         <a href="#" aria-label="Facebook" className="hover:text-brand transition-colors duration-300">
           <Facebook className="w-6 h-6" />

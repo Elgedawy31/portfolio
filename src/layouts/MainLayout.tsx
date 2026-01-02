@@ -12,9 +12,11 @@ export default function MainLayout() {
       <main className="mx-auto max-w-7xl px-4 py-8 grow">
         <Outlet />
       </main>
-      <TestimonialsSection />
+     <section className="bg-section-background">
+     <TestimonialsSection />
       <ContactSection />
       <Footer />
+     </section>
     </div>
   );
 }

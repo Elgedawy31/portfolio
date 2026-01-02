@@ -17,7 +17,7 @@ const DecorativeTextBackground: React.FC<DecorativeTextBackgroundProps> = ({
       aria-hidden="true"
       style={{
         opacity,
-        color: 'var(--color-foreground)',
+        color: 'var(--color-muted)',
         fontSize: 'clamp(8rem, 20vw, 20rem)',
         fontWeight: 'bold',
         textTransform: 'uppercase',
