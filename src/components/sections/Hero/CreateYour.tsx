@@ -14,7 +14,7 @@ function CreateYour() {
 
     const hideTimer = setTimeout(() => {
       setShowContent(false);
-    }, 900); // Delay to hide everything after 900ms
+    }, 1200); // Delay to hide everything after 900ms
 
     return () => {
       clearTimeout(imageTimer);
