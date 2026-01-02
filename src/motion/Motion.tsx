@@ -7,11 +7,13 @@ import { motionTokens } from "./tokens";
 const variantMap = {
   fadeUp: fade.fadeUp,
   fadeIn: fade.fadeIn,
+  fadeDown: fade.fadeDown,
   slideLeft: slide.slideLeft,
 };
 
 type MotionProps = {
-  show: boolean;
+  show?: boolean;
+  animateOnMount?: boolean;
   variant: keyof typeof variantMap;
   offset?: number;
   duration?: keyof typeof motionTokens.duration;
@@ -28,12 +30,15 @@ export function Motion({
   delay = 0,
   className,
   children,
+  animateOnMount,
 }: MotionProps) {
+  const animateProp = animateOnMount ? "visible" : show ? "visible" : "hidden";
+
   return (
     <motion.div
       variants={variantMap[variant](offset)}
       initial="hidden"
-      animate={show ? "visible" : "hidden"}
+      animate={animateProp}
       transition={{
         duration: motionTokens.duration[duration],
         delay,
