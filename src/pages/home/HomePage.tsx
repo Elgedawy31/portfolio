@@ -1,10 +1,9 @@
-import Hero from "@/components/sections/Hero.tsx"
+import Hero from "@/components/sections/Hero/Hero"
 
 function HomePage() {
   return (
     <div>
     <Hero />
-
     </div>
   )
 }
