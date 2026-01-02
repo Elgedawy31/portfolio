@@ -24,9 +24,9 @@ function WithMe() {
 
   return (
     <Motion animateOnMount={true} variant="fadeUp">
-        <h1 className={`text-[40px] font-bold uppercase flex items-center relative `}>
+        <h1 className={`text-[40px] font-bold uppercase flex items-start relative `}>
           <span className={`${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} transition-all duration-500`}>With</span>
-          <img src={WithMeSVG} alt="create your" className={`inline-block ml-4 mr-4 h-[53px] object-cover rounded-lg transition-all duration-500 ${animateImage ? 'w-[153px] opacity-100' : 'w-0 opacity-0'}`} />
+          <img src={WithMeSVG} alt="create your" className={`inline-block ml-4 mr-4 object-cover rounded-lg transition-all duration-500 ${showContent ? (animateImage ? 'h-[53px] w-[153px] opacity-100' : 'h-[53px] w-0 opacity-0') : 'h-[250px] w-[250px] opacity-100'}`} />
           <span className={`${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} transition-all duration-500`}>Me</span>
         </h1>
       
