@@ -5,10 +5,11 @@ import WithMe from "./WithMy"
 import AnimatedBlurBackground from "./AnimatedBlurBackground"
 import HeroMarquee from "./HeroMarquee"
 import NameAnimation from "./NameAnimation"
+import LocationInfo from "./LocationInfo"
 
 function Hero() {
   return (
-    <div className="relative h-screen overflow-hidden pt-44 px-4">
+    <div className="relative min-h-screen overflow-hidden pt-44 px-4">
       <AnimatedBlurBackground />
       <CreateYour />
       <Feature />
@@ -16,6 +17,7 @@ function Hero() {
       <NameAnimation />
       <HeroBackground />
       <HeroMarquee />
+      <LocationInfo />
     </div>
   )
 }

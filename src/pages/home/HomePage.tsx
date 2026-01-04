@@ -2,7 +2,7 @@ import Hero from "@/components/sections/Hero/Hero"
 
 function HomePage() {
   return (
-    <div className="relative h-screen w-full">
+    <div className="relative min-h-screen w-full">
     <Hero />
     </div>
   )
