@@ -19,7 +19,7 @@ function Footer() {
           <Github className="w-6 h-6" />
         </a>
       </div>
-      <p className="text-sm" onClick={handleSendWhatsappMessage}>&copy; {new Date().getFullYear()} Mohamed Elgedawy</p>
+      <p className="text-sm" onClick={handleSendWhatsappMessage}>&copy; {new Date().getFullYear()} Auvnet</p>
     </footer>
   );
 }
