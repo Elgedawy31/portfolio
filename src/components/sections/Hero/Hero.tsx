@@ -3,6 +3,7 @@ import HeroBackground from "./HeroBackground"
 import Feature from "./Feature"
 import WithMe from "./WithMy"
 import AnimatedBlurBackground from "./AnimatedBlurBackground"
+import HeroMarquee from "./HeroMarquee"
 
 function Hero() {
   return (
@@ -12,6 +13,7 @@ function Hero() {
       <Feature />
       <WithMe />
       <HeroBackground />
+      <HeroMarquee />
     </div>
   )
 }
