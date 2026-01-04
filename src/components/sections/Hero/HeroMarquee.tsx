@@ -15,7 +15,7 @@ function HeroMarquee() {
   const marqueeContent: React.ReactNode[] = [];
   marqueeTexts.forEach((text, index) => {
     marqueeContent.push(
-      <span key={`text-${index}`} className="text-white text-lg font-medium whitespace-nowrap">
+      <span key={`text-${index}`} className="text-[#8E8E93] text-lg font-medium whitespace-nowrap">
         {text}
       </span>
     );
@@ -46,6 +46,20 @@ function HeroMarquee() {
           overflow: hidden;
           width: 100%;
           position: relative;
+          mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            black 80px,
+            black calc(100% - 80px),
+            transparent 100%
+          );
+          -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0%,
+            black 80px,
+            black calc(100% - 80px),
+            transparent 100%
+          );
         }
         .marquee-container {
           display: flex;
