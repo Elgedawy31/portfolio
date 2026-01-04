@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import starSvg from "@/assets/star.svg";
 
 const marqueeTexts = [
@@ -33,30 +32,44 @@ function HeroMarquee() {
   });
 
   return (
-    <div className="relative -top-10 overflow-hidden">
-      {/* Marquee container */}
-      <motion.div
-        className="flex items-center whitespace-nowrap"
-        animate={{
-          x: ["0%", "-50%"]
-        }}
-        transition={{
-          repeat: Infinity,
-          repeatType: "loop",
-          duration: 3,
-          ease: "linear",
-        }}
-      >
-        {/* First set */}
-        <div className="flex items-center gap-0">
-          {marqueeContent}
+    <>
+      <style>{`
+        @keyframes marquee {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-25%);
+          }
+        }
+        .marquee-wrapper {
+          overflow: hidden;
+          width: 100%;
+          position: relative;
+        }
+        .marquee-container {
+          display: flex;
+          width: max-content;
+        }
+        .marquee-track {
+          display: flex;
+          align-items: center;
+          flex-shrink: 0;
+        }
+        .marquee-animation {
+          animation: marquee 12s linear infinite;
+        }
+      `}</style>
+      <div className="relative -top-10 marquee-wrapper">
+        <div className="marquee-container marquee-animation">
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="marquee-track">
+              {marqueeContent}
+            </div>
+          ))}
         </div>
-        {/* Duplicate for seamless loop */}
-        <div className="flex items-center gap-0">
-          {marqueeContent}
-        </div>
-      </motion.div>
-    </div>
+      </div>
+    </>
   );
 }
 
