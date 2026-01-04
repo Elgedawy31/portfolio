@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { Motion } from "@/motion/Motion";
 import starSvg from "@/assets/star.svg";
 
 const marqueeTexts = [
@@ -11,6 +13,14 @@ const marqueeTexts = [
 ];
 
 function HeroMarquee() {
+  const [showMarquee, setShowMarquee] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowMarquee(true);
+    }, 2100);
+    return () => clearTimeout(timer);
+  }, []);
   // Create the marquee content with stars between text items
   const marqueeContent: React.ReactNode[] = [];
   marqueeTexts.forEach((text, index) => {
@@ -32,7 +42,7 @@ function HeroMarquee() {
   });
 
   return (
-    <>
+    <Motion show={showMarquee} variant="fadeIn">
       <style>{`
         @keyframes marquee {
           from {
@@ -72,6 +82,7 @@ function HeroMarquee() {
         }
         .marquee-animation {
           animation: marquee 12s linear infinite;
+          animation-delay: 300ms;
         }
       `}</style>
       <div className="relative -top-10 marquee-wrapper">
@@ -83,7 +94,7 @@ function HeroMarquee() {
           ))}
         </div>
       </div>
-    </>
+    </Motion>
   );
 }
 
