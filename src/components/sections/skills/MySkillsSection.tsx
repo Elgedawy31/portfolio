@@ -19,11 +19,17 @@ const MySkillsSection: React.FC = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setIsVisible(true);
+            // Add a small delay before starting animation
+            setTimeout(() => {
+              setIsVisible(true);
+            }, 200);
           }
         });
       },
-      { threshold: 0.2 }
+      { 
+        threshold: 0.5, // Require 50% of section to be visible
+        rootMargin: '0px 0px -100px 0px' // Trigger when section is 100px into viewport
+      }
     );
 
     observer.observe(currentSection);
@@ -82,6 +88,10 @@ const MySkillsSection: React.FC = () => {
           // Use measured card height for vertical positioning
           const finalTop = row === 0 ? '0px' : `${row * (cardHeight + 8)}px`;
 
+          // First card stays in place, others animate
+          const isFirstCard = index === 0;
+          const shouldAnimate = !isFirstCard && isVisible;
+
           return (
             <motion.div
               key={index}
@@ -91,11 +101,11 @@ const MySkillsSection: React.FC = () => {
                 top: 0,
                 left: 0,
                 width: cardWidth,
-                opacity: 0,
-                scale: 0.8,
+                opacity: 1, // All cards visible by default
+                scale: 1, // All cards at full scale by default
               }}
               animate={
-                isVisible
+                shouldAnimate
                   ? {
                       position: 'absolute',
                       top: finalTop,
@@ -109,15 +119,19 @@ const MySkillsSection: React.FC = () => {
                       top: 0,
                       left: 0,
                       width: cardWidth,
-                      opacity: 0,
-                      scale: 0.8,
+                      opacity: 1,
+                      scale: 1,
                     }
               }
-              transition={{
-                duration: 0.6,
-                delay: index * 0.1,
-                ease: [0.42, 0, 0.58, 1.0],
-              }}
+              transition={
+                shouldAnimate
+                  ? {
+                      duration: 0.6,
+                      delay: 0.3 + ((index - 1) * 0.15), // Start with 0.3s base delay, then 0.15s between each card (excluding first)
+                      ease: [0.42, 0, 0.58, 1.0],
+                    }
+                  : {}
+              }
               className="absolute"
             >
               <SkillCard
