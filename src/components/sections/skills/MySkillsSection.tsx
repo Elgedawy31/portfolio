@@ -75,7 +75,7 @@ const MySkillsSection: React.FC = () => {
         title="MY SKILLS"
         description="A VERSATILE SET OF TECHNICAL AND CREATIVE SKILLS DEVELOPED THROUGH HANDS-ON EXPERIENCE AND CONTINUOUS LEARNING."
       />
-      <div ref={containerRef} className="relative mt-4" style={{ minHeight: '400px' }}>
+      <div ref={containerRef} className="relative mt-4" style={{ minHeight: '330px' }}>
         {cards.map((card, index) => {
           const col = index % 2;
           const row = Math.floor(index / 2);
