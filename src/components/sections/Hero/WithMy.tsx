@@ -44,11 +44,11 @@ function WithMe() {
           With
         </span>
         <div className=" inline-block overflow-visible ">
-          { showLeftText && (
-            <p className="absolute left-0 text-[14px] font-light -top-14  h-[216px] w-[200px]   transition-all duration-500 z-10">
+          <Motion show={showLeftText} variant="fadeIn">
+            <p className="absolute left-0 text-[14px] font-light -top-16  h-[216px] w-[160px]   capitalize z-10">
              I'm a self-taught Senior Software Engineer and Tech Lead with expertise in mobile (Flutter) and backend (Node.js). For over 2 years, I've led 20+ projects, mentoring junior teams and addressing complex technical challenges.
             </p>
-          )}
+          </Motion>
           <img
             src={WithMeSVG}
             alt="create your"
@@ -57,7 +57,7 @@ function WithMe() {
                 ? animateImage
                   ? "h-[53px] w-[153px] opacity-100"
                   : "h-[53px] w-0 opacity-0"
-                : "h-[216px] w-[163px] opacity-100 translate-x-24 -translate-y-16"
+                : "h-[216px] w-[163px] opacity-100 translate-x-16 -translate-y-16"
             }`}
           />
         </div>
