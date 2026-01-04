@@ -1,6 +1,7 @@
 import Hero from "@/components/sections/Hero/Hero"
 import { MySkillsSection } from "@/components/sections/skills"
 import { SelectedProjectsSection } from "@/components/sections/projects"
+import { StatisticsSection } from "@/components/sections/statistics"
 
 function HomePage() {
   return (
@@ -8,6 +9,7 @@ function HomePage() {
     <Hero />
     <MySkillsSection />
     <SelectedProjectsSection />
+    <StatisticsSection />
     </div>
   )
 }
