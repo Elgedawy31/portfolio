@@ -4,6 +4,7 @@ import Feature from "./Feature"
 import WithMe from "./WithMy"
 import AnimatedBlurBackground from "./AnimatedBlurBackground"
 import HeroMarquee from "./HeroMarquee"
+import NameAnimation from "./NameAnimation"
 
 function Hero() {
   return (
@@ -12,6 +13,7 @@ function Hero() {
       <CreateYour />
       <Feature />
       <WithMe />
+      <NameAnimation />
       <HeroBackground />
       <HeroMarquee />
     </div>
