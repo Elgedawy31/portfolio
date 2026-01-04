@@ -8,6 +8,18 @@ const SelectedProjectsSection: React.FC = () => {
       title: 'PROJECT NAME 1',
       date: '1 - 1 - 2025',
       description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+    },{
+      title: 'PROJECT NAME 1',
+      date: '1 - 1 - 2025',
+      description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+    },{
+      title: 'PROJECT NAME 1',
+      date: '1 - 1 - 2025',
+      description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
+    },{
+      title: 'PROJECT NAME 1',
+      date: '1 - 1 - 2025',
+      description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
     },
   ];
 

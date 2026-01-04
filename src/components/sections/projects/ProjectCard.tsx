@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { CircleArrowRight } from 'lucide-react';
 import projectSideSVG from '@/assets/proejct-side.svg';
 import projectImgSVG from '@/assets/project-img.svg';
 
@@ -11,7 +11,7 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ title, date, description }) => {
   return (
-    <div className="relative flex items-start gap-4 h-[350px]">
+    <div className="relative flex items-start gap-4 ">
       {/* Left side - Vertical line with button */}
       <div className="relative shrink-0 w-[60px]">
         <img 
@@ -20,19 +20,21 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, date, description }) =
           className="w-full h-full object-contain"
         />
         {/* Circular button on the line - positioned at center */}
-        {/* <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-[#2A2A2A] rounded-full flex items-center justify-center border-2 border-white/30 shadow-lg backdrop-blur-sm">
-          <div className="text-white text-xs font-bold">ED</div>
-        </div> */}
+        <img 
+            src={projectImgSVG} 
+            alt={title} 
+            className=" object-cover rounded-full absolute top-1/2 left-1/2 transform -translate-x-8 -translate-y-1/2 w-12 h-12"
+          />
       </div>
 
       {/* Right side - Project content */}
-      <div className="flex-1 flex flex-col h-full">
+      <div className="flex-1 flex flex-col gap-2 h-full">
         {/* Top - Title and Date */}
         <div className="">
-          <h3 className="text-xl font-bold uppercase text-white mb-3">
+          <h3 className="text-[20px] font-bold uppercase text-white ">
             {title}
           </h3>
-          <p className="text-base font-normal text-white">
+          <p className="text-xs font-normal text-[#8E8E93]">
             {date}
           </p>
         </div>
@@ -48,12 +50,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, date, description }) =
 
         {/* Bottom - Description and navigation */}
         <div className="flex items-end justify-between mt-auto">
-          <p className="text-sm font-normal text-white max-w-lg leading-relaxed">
+          <p className="text-xs font-normal text-[#8E8E93]  leading-relaxed">
             {description}
           </p>
-          <button className="w-14 h-14 bg-white rounded-full flex items-center justify-center hover:bg-white/90 transition-colors flex-shrink-0 ml-6 shadow-lg">
-            <ArrowRight className="w-6 h-6 text-black" />
-          </button>
+        <button className="border-white border  flex items-center justify-center rounded-full">
+            <CircleArrowRight className="w-6 h-6 text-black" fill='white'  />
+        </button>
         </div>
       </div>
     </div>
