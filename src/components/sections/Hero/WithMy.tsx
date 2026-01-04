@@ -1,21 +1,10 @@
-
 import { useEffect, useState } from "react";
 import { Motion } from "@/motion/Motion";
 import WithMeSVG from "@/assets/banner/me.svg";
 
-interface WithMeProps {
-  leftText?: string;
-  leftTextPosition?: {
-    top?: string;
-    left?: string;
-    right?: string;
-    bottom?: string;
-    transform?: string;
-    marginRight?: string;
-  };
-}
 
-function WithMe({ leftText = "anything", leftTextPosition }: WithMeProps) {
+
+function WithMe() {
   const [animateImage, setAnimateImage] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const [showLeftText, setShowLeftText] = useState(false);
@@ -40,42 +29,50 @@ function WithMe({ leftText = "anything", leftTextPosition }: WithMeProps) {
     };
   }, []);
 
-  const defaultPosition = {
-    right: "100%",
-    top: "50%",
-    transform: "translateY(-50%)",
-    marginRight: "16px",
-    ...leftTextPosition,
-  };
-
   return (
     <Motion animateOnMount={true} variant="fadeUp">
-        <h1 className={`text-[40px] font-bold uppercase flex items-start relative `}>
-          <span className={`${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} transition-all duration-500`}>With</span>
-          <div className="relative inline-block">
-            {leftText && showLeftText && (
-              <span
-                className="absolute text-[40px] font-bold uppercase whitespace-nowrap transition-all duration-500"
-                style={{
-                  top: defaultPosition.top,
-                  left: defaultPosition.left,
-                  right: defaultPosition.right,
-                  bottom: defaultPosition.bottom,
-                  transform: defaultPosition.transform,
-                  marginRight: defaultPosition.marginRight,
-                  opacity: showLeftText ? 1 : 0,
-                }}
-              >
-                {leftText}
-              </span>
-            )}
-            <img src={WithMeSVG} alt="create your" className={`inline-block ml-4 mr-4 object-cover rounded-lg transition-all duration-500 ${showContent ? (animateImage ? 'h-[53px] w-[153px] opacity-100' : 'h-[53px] w-0 opacity-0') : 'h-[216px] w-[163px] opacity-100 translate-x-24 -translate-y-16'}`} />
-          </div>
-          <span className={`${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} transition-all duration-500`}>Me</span>
-        </h1>
-      
-    </Motion> 
-  )
+      <h1
+        className={`text-[40px] font-bold uppercase flex items-start relative `}
+      >
+        <span
+          className={`${
+            showContent
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
+          } transition-all duration-500`}
+        >
+          With
+        </span>
+        <div className=" inline-block overflow-visible ">
+          { showLeftText && (
+            <p className="absolute left-0 text-[14px] font-light -top-14  h-[216px] w-[200px]   transition-all duration-500 z-10">
+             I'm a self-taught Senior Software Engineer and Tech Lead with expertise in mobile (Flutter) and backend (Node.js). For over 2 years, I've led 20+ projects, mentoring junior teams and addressing complex technical challenges.
+            </p>
+          )}
+          <img
+            src={WithMeSVG}
+            alt="create your"
+            className={`inline-block ml-4 mr-4 object-cover rounded-lg transition-all duration-500 ${
+              showContent
+                ? animateImage
+                  ? "h-[53px] w-[153px] opacity-100"
+                  : "h-[53px] w-0 opacity-0"
+                : "h-[216px] w-[163px] opacity-100 translate-x-24 -translate-y-16"
+            }`}
+          />
+        </div>
+        <span
+          className={`${
+            showContent
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 translate-y-8"
+          } transition-all duration-500`}
+        >
+          Me
+        </span>
+      </h1>
+    </Motion>
+  );
 }
 
-export default WithMe
+export default WithMe;
