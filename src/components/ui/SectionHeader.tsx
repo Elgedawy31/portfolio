@@ -20,7 +20,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   return (
     <div className={`${className}`}>
-      <h2 className={`text-4xl font-extrabold uppercase text-white leading-tight mb-4 ${titleClassName}`}>
+      <h2 className={`text-[32px] font-bold uppercase text-white leading-tight mb-4 ${titleClassName}`}>
         {titleWords.map((word, index) => (
           <React.Fragment key={index}>
             {index > 0 && <br />}
