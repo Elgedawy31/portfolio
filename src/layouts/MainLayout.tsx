@@ -2,7 +2,6 @@
 import { Outlet } from "react-router-dom";
 import { Header, Footer } from "@/components/common";
 import { ContactSection } from "@/components/sections/contact";
-import { TestimonialsSection } from "@/components/sections/testimonials";
 
 export default function MainLayout() {
   return (
@@ -13,7 +12,7 @@ export default function MainLayout() {
         <Outlet />
       </main>
      <section className="bg-section-background">
-     <TestimonialsSection />
+     {/* <TestimonialsSection /> */}
       <ContactSection />
       <Footer />
      </section>
