@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Motion } from "@/motion/Motion";
 
 function NameAnimation() {
   const [showName, setShowName] = useState(false);
+  const [showTitle, setShowTitle] = useState(false);
 
   useEffect(() => {
     // Start animation after CreateYour, Feature, WithMe animations complete (1200ms)
     const timer = setTimeout(() => {
       setShowName(true);
-    }, 1200);
+    }, 2500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    // Show title after 1200ms
+    const timer = setTimeout(() => {
+      setShowTitle(true);
+    }, 2500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -20,7 +30,7 @@ function NameAnimation() {
       className="absolute left-4 top-[112px] sm:left-4 sm:top-[112px] md:left-4 md:top-[112px]"
     >
       <h1 
-        className="text-3xl font-bold uppercase text-white leading-tight flex flex-wrap"
+        className="text-[36px] font-bold uppercase text-white leading-tight flex flex-wrap"
         style={{
           fontFamily: 'Montserrat, sans-serif',
           fontWeight: 800,
@@ -42,6 +52,17 @@ function NameAnimation() {
           </motion.span>
         ))}
       </h1>
+      
+      <Motion show={showTitle} variant="fadeUp" className="">
+        <div className="">
+          <p className="text-[20px] text-[#8E8E93] uppercase tracking-wider leading-relaxed">
+            A SENIOR SOFTWARE ENGINEER
+          </p>
+          <p className="text-[20px] text-[#8E8E93] uppercase tracking-wider">
+            & TECH LEAD
+          </p>
+        </div>
+      </Motion>
     </div>
   );
 }
