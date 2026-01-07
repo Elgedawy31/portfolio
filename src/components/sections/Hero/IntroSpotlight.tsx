@@ -233,8 +233,8 @@ function IntroSpotlight({
         <div
           className="relative flex items-center justify-center"
           style={{
-            width: spotlightRadius * 2,
-            height: spotlightRadius * 2,
+            width: 206,
+            height: 206,
             borderRadius: "9999px",
           }}
         >
