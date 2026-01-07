@@ -26,7 +26,7 @@ function Feature() {
     <Motion animateOnMount={showContent} variant="slideLeft">
         <h1 className="text-[40px] font-bold uppercase flex items-center justify-end text-right">
           <span className={`${animateImage ? 'translate-0':'translate-x-8'} transition-transform relative`}>Feat</span>
-          <img src={FeatureSVG} alt="create your" className={`inline-block ml-4 mr-4 h-[29px] transition-all duration-500 ${animateImage ? 'w-[140px] opacity-100' : 'w-0 opacity-0'}`} />
+          <img src={FeatureSVG} alt="create your" className={`inline-block ml-4 mr-4 h-[29px] transition-all duration-1000 ${animateImage ? 'w-full opacity-100' : 'w-0 opacity-0'}`} />
           <span >Ure</span>
         </h1>
     </Motion> 
