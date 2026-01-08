@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import heroBgV2 from "@/assets/hero-bg-v2.svg";
+import introBg from "@/assets/intro-bg.svg";
 import coverSvg from "@/assets/cover.svg";
 
 const words = ["GET", "WHAT", "YOU", "NEED"];
@@ -9,20 +9,20 @@ function IntroSpotlight() {
   const [displayedWords, setDisplayedWords] = useState<string[]>([]);
 
   useEffect(() => {
-    const timers = words.map((word, index) => {
+    const wordTimers = words.map((word, index) => {
       return setTimeout(() => {
         setDisplayedWords(prev => [...prev, word]);
       }, (index + 1) * 500); // 500ms delay between each word
     });
 
     return () => {
-      timers.forEach(timer => clearTimeout(timer));
+      wordTimers.forEach(timer => clearTimeout(timer));
     };
   }, []);
 
   return (
     <div className="absolute w-full h-screen max-h-screen overflow-hidden">
-      {/* Background layer - hero-bg-v2.svg */}
+      {/* Background layer - intro-bg.svg */}
       <div 
         className="absolute inset-0 w-full h-full"
         style={{
@@ -31,8 +31,8 @@ function IntroSpotlight() {
         }}
       >
         <img 
-          src={heroBgV2} 
-          alt="Hero background" 
+          src={introBg} 
+          alt="Intro background" 
           className="w-full h-full object-cover"
           loading="eager"
           fetchPriority="high"
