@@ -6,10 +6,12 @@ import { LightbulbIcon } from '@/components/icons';
 
 const MySkillsSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [cardHeight, setCardHeight] = useState(200);
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const firstCardRef = useRef<HTMLDivElement>(null);
+
+  // Fixed card height - all cards will have the same height
+  const cardHeight = 180;
+  const gap = 16; // Gap between cards
 
   useEffect(() => {
     const currentSection = sectionRef.current;
@@ -37,13 +39,6 @@ const MySkillsSection: React.FC = () => {
     return () => {
       observer.unobserve(currentSection);
     };
-  }, []);
-
-  useEffect(() => {
-    if (firstCardRef.current) {
-      const height = firstCardRef.current.offsetHeight;
-      setCardHeight(height);
-    }
   }, []);
 
   const cards = [
@@ -75,18 +70,18 @@ const MySkillsSection: React.FC = () => {
         title="MY SKILLS"
         description="A VERSATILE SET OF TECHNICAL AND CREATIVE SKILLS DEVELOPED THROUGH HANDS-ON EXPERIENCE AND CONTINUOUS LEARNING."
       />
-      <div ref={containerRef} className="relative mt-4" style={{ minHeight: '330px' }}>
+      <div ref={containerRef} className="relative mt-4" style={{ minHeight: `${(cardHeight + gap) * 2}px` }}>
         {cards.map((card, index) => {
           const col = index % 2;
           const row = Math.floor(index / 2);
           
           // Calculate final grid position
           // Each card takes 50% width minus half the gap
-          const cardWidth = 'calc(50% - 4px)';
-          const finalLeft = col === 0 ? '0%' : 'calc(50% + 4px)';
+          const cardWidth = `calc(50% - ${gap / 2}px)`;
+          const finalLeft = col === 0 ? '0%' : `calc(50% + ${gap / 2}px)`;
           
-          // Use measured card height for vertical positioning
-          const finalTop = row === 0 ? '0px' : `${row * (cardHeight + 8)}px`;
+          // Use fixed card height for vertical positioning with gap
+          const finalTop = row === 0 ? '0px' : `${row * (cardHeight + gap)}px`;
 
           // First card stays in place, others animate
           const isFirstCard = index === 0;
@@ -99,7 +94,6 @@ const MySkillsSection: React.FC = () => {
           return (
             <motion.div
               key={index}
-              ref={index === 0 ? firstCardRef : null}
               initial={{
                 position: 'absolute',
                 top: 0,
