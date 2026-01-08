@@ -3,7 +3,7 @@ import coverSvg from "@/assets/cover.svg";
 
 function IntroSpotlight() {
   return (
-    <div className="relative w-full min-h-screen max-h-screen overflow-hidden">
+    <div className="relative w-full h-screen max-h-screen overflow-hidden">
       {/* Background layer - hero-bg-v2.svg */}
       <div 
         className="absolute inset-0 w-full h-full"
@@ -20,6 +20,17 @@ function IntroSpotlight() {
           fetchPriority="high"
         />
       </div>
+      
+      {/* Blurred overlay - covers everything except center circle */}
+      <div 
+        className="absolute inset-0 w-full h-full z-5 backdrop-blur-xs"
+        style={{
+          willChange: 'transform',
+          transform: 'translateZ(0)', // GPU acceleration
+          maskImage: 'radial-gradient(circle 103px at 50% 50%, transparent 0%, transparent 99.9%, black 100%)',
+          WebkitMaskImage: 'radial-gradient(circle 103px at 50% 50%, transparent 0%, transparent 99.9%, black 100%)',
+        }}
+      />
       
       {/* Foreground layer - cover.svg */}
       <div 
