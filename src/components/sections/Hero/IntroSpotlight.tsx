@@ -2,12 +2,43 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import introBg from "@/assets/intro-bg.svg";
 import coverSvg from "@/assets/cover.svg";
+import { useMotionValue, useMotionTemplate , animate } from "framer-motion";
 
 const words = ["GET", "WHAT", "YOU", "NEED"];
 
 function IntroSpotlight() {
   const [displayedWords, setDisplayedWords] = useState<string[]>([]);
-
+  const bgX = useMotionValue(50);
+  const bgY = useMotionValue(50);
+  
+  const bgPosition = useMotionTemplate`${bgX}% ${bgY}%`;
+  useEffect(() => {
+    const positions = [
+      { x: 20, y: 30 },
+      { x: 70, y: 25 },
+      { x: 40, y: 60 },
+      { x: 60, y: 75 },
+    ];
+  
+    let index = 0;
+  
+    const interval = setInterval(() => {
+      animate(bgX, positions[index].x, {
+        duration: 0.45,
+        ease: "easeInOut",
+      });
+      
+      animate(bgY, positions[index].y, {
+        duration: 0.45,
+        ease: "easeInOut",
+      });
+      
+      index = (index + 1) % positions.length;
+    }, 500);
+  
+    return () => clearInterval(interval);
+  }, []);
+  
   useEffect(() => {
     const wordTimers = words.map((word, index) => {
       return setTimeout(() => {
@@ -30,17 +61,18 @@ function IntroSpotlight() {
           transform: 'translateZ(0)', // GPU acceleration
         }}
       >
-        <img 
-          src={introBg} 
-          alt="Intro background" 
-          className="w-full h-full object-cover"
-          style={{
-            transform: 'scale(2)',
-            transformOrigin: 'center center',
-          }}
-          loading="eager"
-          fetchPriority="high"
-        />
+        <motion.div
+  className="w-full h-full"
+  style={{
+    backgroundImage: `url(${introBg})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: bgPosition,
+    transform: "scale(2)",
+    transformOrigin: "center",
+  }}
+/>
+
       </div>
       
       {/* Blurred overlay - covers everything except center circle */}
