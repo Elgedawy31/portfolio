@@ -24,7 +24,7 @@ function IntroSpotlight() {
     <div className="absolute w-full h-screen max-h-screen overflow-hidden">
       {/* Background layer - intro-bg.svg */}
       <div 
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full overflow-hidden"
         style={{
           willChange: 'transform',
           transform: 'translateZ(0)', // GPU acceleration
@@ -34,6 +34,10 @@ function IntroSpotlight() {
           src={introBg} 
           alt="Intro background" 
           className="w-full h-full object-cover"
+          style={{
+            transform: 'scale(2)',
+            transformOrigin: 'center center',
+          }}
           loading="eager"
           fetchPriority="high"
         />
