@@ -91,6 +91,10 @@ const MySkillsSection: React.FC = () => {
           // First card stays in place, others animate
           const isFirstCard = index === 0;
           const shouldAnimate = !isFirstCard && isVisible;
+          
+          // Set z-index: top row (row 0) should be above bottom row (row 1)
+          // Top row gets z-index 10, bottom row gets z-index 5
+          const zIndex = row === 0 ? 10 : 5;
 
           return (
             <motion.div
@@ -103,6 +107,7 @@ const MySkillsSection: React.FC = () => {
                 width: cardWidth,
                 opacity: 1, // All cards visible by default
                 scale: 1, // All cards at full scale by default
+                zIndex: zIndex,
               }}
               animate={
                 shouldAnimate
@@ -113,6 +118,7 @@ const MySkillsSection: React.FC = () => {
                       width: cardWidth,
                       opacity: 1,
                       scale: 1,
+                      zIndex: zIndex,
                     }
                   : {
                       position: 'absolute',
@@ -121,6 +127,7 @@ const MySkillsSection: React.FC = () => {
                       width: cardWidth,
                       opacity: 1,
                       scale: 1,
+                      zIndex: zIndex,
                     }
               }
               transition={
@@ -133,6 +140,7 @@ const MySkillsSection: React.FC = () => {
                   : {}
               }
               className="absolute"
+              style={{ zIndex }}
             >
               <SkillCard
                 icon={card.icon}
