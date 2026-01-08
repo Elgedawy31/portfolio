@@ -6,12 +6,12 @@ import coverSvg from "@/assets/cover.svg";
 const words = ["GET", "WHAT", "YOU", "NEED"];
 
 function IntroSpotlight() {
-  const [visibleWords, setVisibleWords] = useState(0);
+  const [displayedWords, setDisplayedWords] = useState<string[]>([]);
 
   useEffect(() => {
-    const timers = words.map((_, index) => {
+    const timers = words.map((word, index) => {
       return setTimeout(() => {
-        setVisibleWords(index + 1);
+        setDisplayedWords(prev => [...prev, word]);
       }, (index + 1) * 500); // 500ms delay between each word
     });
 
@@ -69,20 +69,25 @@ function IntroSpotlight() {
 
       {/* Animated text - top center */}
       <div className="absolute top-32 left-1/2 transform -translate-x-1/2 z-20 pt-8 sm:pt-12 md:pt-16">
-        <h1 className="text-white text-[20px]  font-bold uppercase text-center tracking-wide">
-          {words.map((word, index) => (
+        <h1 className="text-white text-[20px] font-extrabold uppercase tracking-wide flex items-center justify-center flex-wrap">
+          {displayedWords.map((word, index) => (
             <motion.span
-              key={index}
-              initial={{ opacity: 0, y: -20 }}
-              animate={visibleWords > index ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+              key={`${word}-${index}`}
+              layout
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{
-                duration: 0.5,
+                duration: 0.4,
                 ease: [0.42, 0, 0.58, 1.0],
+                layout: {
+                  duration: 0.3,
+                  ease: [0.42, 0, 0.58, 1.0],
+                },
               }}
-              className="inline-block"
+              className="inline-block whitespace-nowrap"
             >
               {word}
-              {index < words.length - 1 && "\u00A0"}
+              {index < displayedWords.length - 1 && "\u00A0"}
             </motion.span>
           ))}
         </h1>
