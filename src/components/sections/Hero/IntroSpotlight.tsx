@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import introBg from "@/assets/intro-bg.svg";
 import coverSvg from "@/assets/cover.svg";
-import { useMotionValue, useMotionTemplate , animate } from "framer-motion";
+import { useMotionValue, animate } from "framer-motion";
 
 const words = ["GET", "WHAT", "YOU", "NEED"];
 
 function IntroSpotlight() {
   const [displayedWords, setDisplayedWords] = useState<string[]>([]);
-  const bgX = useMotionValue(50);
-  const bgY = useMotionValue(50);
-  
-  const bgPosition = useMotionTemplate`${bgX}% ${bgY}%`;
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
   useEffect(() => {
     const positions = [
       { x: 20, y: 30 },
@@ -19,84 +18,89 @@ function IntroSpotlight() {
       { x: 40, y: 60 },
       { x: 60, y: 75 },
     ];
-  
+
     let index = 0;
-  
+
     const interval = setInterval(() => {
-      animate(bgX, positions[index].x, {
+      animate(x, positions[index].x, {
         duration: 0.45,
         ease: "easeInOut",
       });
-      
-      animate(bgY, positions[index].y, {
+
+      animate(y, positions[index].y, {
         duration: 0.45,
         ease: "easeInOut",
       });
-      
+
       index = (index + 1) % positions.length;
     }, 500);
-  
+
     return () => clearInterval(interval);
-  }, []);
-  
+  }, [x, y]);
+
   useEffect(() => {
     const wordTimers = words.map((word, index) => {
       return setTimeout(() => {
-        setDisplayedWords(prev => [...prev, word]);
+        setDisplayedWords((prev) => [...prev, word]);
       }, (index + 1) * 500); // 500ms delay between each word
     });
 
     return () => {
-      wordTimers.forEach(timer => clearTimeout(timer));
+      wordTimers.forEach((timer) => clearTimeout(timer));
     };
   }, []);
 
   return (
     <div className="absolute w-full h-screen max-h-screen overflow-hidden">
       {/* Background layer - intro-bg.svg */}
-      <div 
-        className="absolute inset-0 w-full h-full overflow-hidden"
+      <div
+        className="absolute"
         style={{
-          willChange: 'transform',
-          transform: 'translateZ(0)', // GPU acceleration
+          willChange: "transform",
+          transform: "translateZ(0)", // GPU acceleration
+          top: "-50%",
+          left: "-50%",
+          width: "200%",
+          height: "200%",
         }}
       >
         <motion.div
-  className="w-full h-full"
-  style={{
-    backgroundImage: `url(${introBg})`,
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundPosition: bgPosition,
-    transform: "scale(2)",
-    transformOrigin: "center",
-  }}
-/>
-
+          className="w-full h-full"
+          style={{
+            backgroundImage: `url(${introBg})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center center",
+            x,
+            y,
+          }}
+        />
       </div>
-      
+
       {/* Blurred overlay - covers everything except center circle */}
-      <div 
+      <div
         className="absolute inset-0 w-full h-full z-5 backdrop-blur-xs"
         style={{
-          willChange: 'transform',
-          transform: 'translateZ(0)', // GPU acceleration
-          maskImage: 'radial-gradient(circle 103px at 50% 50%, transparent 0%, transparent 99.9%, black 100%)',
-          WebkitMaskImage: 'radial-gradient(circle 103px at 50% 50%, transparent 0%, transparent 99.9%, black 100%)',
+          willChange: "transform",
+          transform: "translateZ(0)", // GPU acceleration
+          maskImage:
+            "radial-gradient(circle 103px at 50% 50%, transparent 0%, transparent 99.9%, black 100%)",
+          WebkitMaskImage:
+            "radial-gradient(circle 103px at 50% 50%, transparent 0%, transparent 99.9%, black 100%)",
         }}
       />
-      
+
       {/* Foreground layer - cover.svg */}
-      <div 
+      <div
         className="absolute inset-0 w-full h-full z-10"
         style={{
-          willChange: 'transform',
-          transform: 'translateZ(0)', // GPU acceleration
+          willChange: "transform",
+          transform: "translateZ(0)", // GPU acceleration
         }}
       >
-        <img 
-          src={coverSvg} 
-          alt="Cover overlay" 
+        <img
+          src={coverSvg}
+          alt="Cover overlay"
           className="w-full h-full object-cover"
           loading="eager"
           fetchPriority="high"
@@ -129,7 +133,7 @@ function IntroSpotlight() {
         </h1>
       </div>
     </div>
-  )
+  );
 }
 
-export default IntroSpotlight
+export default IntroSpotlight;
