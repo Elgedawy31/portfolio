@@ -3,7 +3,7 @@ import coverSvg from "@/assets/cover.svg";
 
 function IntroSpotlight() {
   return (
-    <div className="relative w-full h-screen max-h-screen overflow-hidden">
+    <div className="absolute w-full h-screen max-h-screen overflow-hidden">
       {/* Background layer - hero-bg-v2.svg */}
       <div 
         className="absolute inset-0 w-full h-full"
