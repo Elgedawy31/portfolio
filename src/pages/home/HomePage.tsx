@@ -47,11 +47,11 @@ function HomePage() {
   return (
     <div className="relative min-h-screen w-full">
       {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white dark:bg-gray-800 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3">
+        <div className="fixed inset-0 -z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          {/* <div className="bg-white dark:bg-gray-800 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3">
             <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
             <span className="text-gray-900 dark:text-white font-medium">Loading profile...</span>
-          </div>
+          </div> */}
         </div>
       )}
       {error && !loading && (
@@ -62,8 +62,8 @@ function HomePage() {
       <IntroSpotlight
       />
       <Hero />
-      <MySkillsSection />
-      <SelectedProjectsSection />
+      <MySkillsSection skills={profile?.skills} />
+      <SelectedProjectsSection projects={profile?.projects} />
       <StatisticsSection />
     </div>
   )

@@ -3,8 +3,13 @@ import { motion } from 'framer-motion';
 import { SectionHeader } from '@/components/ui';
 import SkillCard from './SkillCard';
 import { LightbulbIcon } from '@/components/icons';
+import type { Skill } from '@/api/Api';
 
-const MySkillsSection: React.FC = () => {
+interface MySkillsSectionProps {
+  skills?: Skill[];
+}
+
+const MySkillsSection: React.FC<MySkillsSectionProps> = ({ skills }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,7 +46,8 @@ const MySkillsSection: React.FC = () => {
     };
   }, []);
 
-  const cards = [
+  // Default cards if no skills provided
+  const defaultCards = [
     {
       icon: <LightbulbIcon className="w-3 h-3 text-white" />,
       title: 'MANAGEMENT',
@@ -63,6 +69,18 @@ const MySkillsSection: React.FC = () => {
       description: 'MY COLLABORATION SKILLS ENABLE EFFECTIVE TEAMWORK, CLEAR COMMUNICATION, AND SEAMLESS COORDINATION TO DELIVER EXCEPTIONAL RESULTS TOGETHER',
     },
   ];
+
+  // Use skills from API if available, otherwise use default cards
+  const cards = skills && skills.length > 0
+    ? skills
+        .sort((a, b) => a.order - b.order) // Sort by order
+        .slice(0,4)
+        .map((skill) => ({
+          icon: <LightbulbIcon className="w-3 h-3 text-white" />,
+          title: skill.name.toUpperCase(),
+          description: skill.description.toUpperCase(),
+        }))
+    : defaultCards;
 
   return (
     <section ref={sectionRef} className="relative py-8 px-4">
