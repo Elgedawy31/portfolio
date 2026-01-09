@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Paperclip, EmailIcon } from '../../icons'; // Changed EmailIcon to Paperclip
+import { AnimatePresence, motion } from 'framer-motion';
+import { Paperclip, EmailIcon } from '../../icons';
+import { sendContactMessage } from '@/api/Api';
 
 // Install @hookform/resolvers for zod integration
 // bun add @hookform/resolvers
@@ -16,19 +18,50 @@ const contactFormSchema = z.object({
 type ContactFormInputs = z.infer<typeof contactFormSchema>;
 
 const ContactForm: React.FC = () => {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ContactFormInputs>({
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<ContactFormInputs>({
     resolver: zodResolver(contactFormSchema),
   });
 
   const [fileName, setFileName] = useState<string | null>(null);
   const [charCount, setCharCount] = useState<number>(0);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const onSubmit = async (data: ContactFormInputs) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log(data);
-    alert('Message sent successfully!');
-    // In a real application, you would send this data to a backend
+    setIsSubmittingForm(true);
+    setSubmitError(null);
+    setSubmitSuccess(false);
+
+    try {
+      const contactData = {
+        messageObj: {
+          name: data.name,
+          email: data.email,
+          description: data.message,
+          // phone and wPhone are optional, can be added later if needed
+        },
+      };
+
+      const response = await sendContactMessage(contactData);
+      
+      if (response.success) {
+        setSubmitSuccess(true);
+        reset(); // Reset form after successful submission
+        setFileName(null);
+        setCharCount(0);
+        setTimeout(() => {
+          setSubmitSuccess(false);
+        }, 8000); // 5 seconds delay
+      } else {
+        throw new Error(response.message || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error sending contact message:', error);
+      setSubmitError(error instanceof Error ? error.message : 'Failed to send message. Please try again.');
+    } finally {
+      setIsSubmittingForm(false);
+    }
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,7 +123,7 @@ const ContactForm: React.FC = () => {
                 <span className="text-sm text-foreground"><span className="text-brand-primary">{charCount}</span> / 250</span>
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isSubmittingForm}
                   className="w-9 h-9 flex items-center justify-center bg-gradient-brand rounded-full focus:outline-none focus:shadow-outline disabled:opacity-50"
                 >
                   <EmailIcon className="w-5 h-5 text-white" />
@@ -100,6 +133,53 @@ const ContactForm: React.FC = () => {
           </div>
           {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
         </div>
+
+        {/* Success Message with Animation */}
+        <AnimatePresence>
+          {submitSuccess && (
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: [0.42, 0, 0.58, 1.0] }}
+              className="bg-green-500/20 border border-green-500 text-green-400 px-6 py-4 rounded-lg shadow-lg"
+            >
+              <div className="flex items-start space-x-3">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
+                  className="shrink-0"
+                >
+                  <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </motion.div>
+                <div>
+                  <h4 className="font-semibold text-green-300 mb-1">شكراً على التواصل!</h4>
+                  <p className="text-sm text-green-400">
+                    تم إرسال رسالتك بنجاح. سنقوم بالرد عليك في أقرب وقت ممكن.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Error Message */}
+        <AnimatePresence>
+          {submitError && (
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: [0.42, 0, 0.58, 1.0] }}
+              className="bg-red-500/20 border border-red-500 text-red-400 px-4 py-3 rounded-lg"
+            >
+              {submitError}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </form>
     </div>
   );
