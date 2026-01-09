@@ -74,7 +74,6 @@ const MySkillsSection: React.FC<MySkillsSectionProps> = ({ skills }) => {
   const cards = skills && skills.length > 0
     ? skills
         .sort((a, b) => a.order - b.order) // Sort by order
-        .slice(0,4)
         .map((skill) => ({
           icon: <LightbulbIcon className="w-3 h-3 text-white" />,
           title: skill.name.toUpperCase(),
@@ -82,13 +81,17 @@ const MySkillsSection: React.FC<MySkillsSectionProps> = ({ skills }) => {
         }))
     : defaultCards;
 
+  // Calculate number of rows dynamically
+  const numberOfRows = Math.ceil(cards.length / 2);
+  const containerHeight = numberOfRows * (cardHeight + gap) - gap; // Subtract last gap
+
   return (
     <section ref={sectionRef} className="relative py-8 px-4">
       <SectionHeader
         title="MY SKILLS"
         description="A VERSATILE SET OF TECHNICAL AND CREATIVE SKILLS DEVELOPED THROUGH HANDS-ON EXPERIENCE AND CONTINUOUS LEARNING."
       />
-      <div ref={containerRef} className="relative mt-4" style={{ minHeight: `${(cardHeight + gap) * 2}px` }}>
+      <div ref={containerRef} className="relative mt-4" style={{ minHeight: `${containerHeight}px` }}>
         {cards.map((card, index) => {
           const col = index % 2;
           const row = Math.floor(index / 2);
@@ -105,9 +108,9 @@ const MySkillsSection: React.FC<MySkillsSectionProps> = ({ skills }) => {
           const isFirstCard = index === 0;
           const shouldAnimate = !isFirstCard && isVisible;
           
-          // Set z-index: top row (row 0) should be above bottom row (row 1)
-          // Top row gets z-index 10, bottom row gets z-index 5
-          const zIndex = row === 0 ? 10 : 5;
+          // Set z-index: higher rows should be above lower rows
+          // Calculate z-index so top row has highest value, decreasing for each row
+          const zIndex = numberOfRows - row;
 
           return (
             <motion.div
