@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import type { EmployeeProfile } from "@/api/Api";
 
 interface StatisticItemProps {
   title: string;
@@ -29,13 +30,14 @@ const StatisticItem: React.FC<StatisticItemProps> = ({
       { threshold: 0.3 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [hasAnimated]);
@@ -84,16 +86,55 @@ const StatisticItem: React.FC<StatisticItemProps> = ({
   );
 };
 
-const StatisticsSection: React.FC = () => {
-  const handleDownloadCV = () => {
-    // You can add your CV file path here
-    const cvUrl = "/cv.pdf"; // Update with your actual CV path
-    const link = document.createElement("a");
-    link.href = cvUrl;
-    link.download = "CV_Resume.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+interface StatisticsSectionProps {
+  profile?: EmployeeProfile | null;
+}
+
+const StatisticsSection: React.FC<StatisticsSectionProps> = ({ profile }) => {
+  // Calculate statistics from profile data
+  const completedProjects = profile?.projects?.length || 0;
+  
+  // Default values if profile data is not available
+  const clientsCount = 15; // Can be added to API later if needed
+
+  const handleDownloadCV = async () => {
+    const cvUrl = profile?.cv?.url || profile?.cv?.secureUrl || profile?.cv?.viewUrl;
+    
+    if (!cvUrl) {
+      console.error("CV URL not available");
+      return;
+    }
+
+    try {
+      // Fetch the PDF file
+      const response = await fetch(cvUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch CV");
+      }
+      
+      // Create a blob from the response
+      const blob = await response.blob();
+      
+      // Create a temporary URL for the blob
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = `CV_${profile?.firstName}_${profile?.lastName || "Resume"}.pdf`;
+      document.body.appendChild(link);
+      
+      // Trigger the download
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Error downloading CV:", error);
+      // Fallback: open in new tab if download fails
+      window.open(cvUrl, "_blank");
+    }
   };
 
   return (
@@ -101,14 +142,14 @@ const StatisticsSection: React.FC = () => {
       <div className="max-w-4xl mx-auto">
         <StatisticItem
           title="WORLDWIDE CLIENTS IN 15 COUNTRIES"
-          value={15}
+          value={clientsCount}
           prefix="+"
           description="Covers the Arab world and extends across Europe"
         />
 
         <StatisticItem
           title="Successfully Completed Projects"
-          value={20}
+          value={completedProjects}
           prefix="+"
           description="Transforming an idea from nothing into a thriving launch is an incredible journey filled with challenges and triumphs."
         />
