@@ -97,7 +97,7 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({ profile }) => {
   // Default values if profile data is not available
   const clientsCount = 15; // Can be added to API later if needed
 
-  const handleDownloadCV = async () => {
+  const handleDownloadCV = () => {
     const cvUrl = profile?.cv?.url || profile?.cv?.secureUrl || profile?.cv?.viewUrl;
     
     if (!cvUrl) {
@@ -105,35 +105,11 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({ profile }) => {
       return;
     }
 
-    try {
-      // Fetch the PDF file
-      const response = await fetch(cvUrl);
-      if (!response.ok) {
-        throw new Error("Failed to fetch CV");
-      }
-      
-      // Create a blob from the response
-      const blob = await response.blob();
-      
-      // Create a temporary URL for the blob
-      const blobUrl = window.URL.createObjectURL(blob);
-      
-      // Create a temporary link element
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = `CV_${profile?.firstName}_${profile?.lastName || "Resume"}.pdf`;
-      document.body.appendChild(link);
-      
-      // Trigger the download
-      link.click();
-      
-      // Clean up
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      console.error("Error downloading CV:", error);
-      // Fallback: open in new tab if download fails
-      window.open(cvUrl, "_blank");
+    // فتح الملف في تبويب جديد
+    const newWindow = window.open(cvUrl, "_blank", "noopener,noreferrer");
+    if (!newWindow) {
+      // إذا فشل فتح تبويب جديد (مثل popup blocker)، افتح في نفس التبويب
+      window.location.href = cvUrl;
     }
   };
 
