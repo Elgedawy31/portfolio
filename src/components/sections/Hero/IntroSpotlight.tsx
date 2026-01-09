@@ -2,41 +2,32 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import introBg from "@/assets/intro-bg.svg";
 import coverSvg from "@/assets/cover.svg";
-import { useMotionValue, animate } from "framer-motion";
 
 const words = ["GET", "WHAT", "YOU", "NEED"];
 
 function IntroSpotlight() {
   const [displayedWords, setDisplayedWords] = useState<string[]>([]);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
+  const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
 
   useEffect(() => {
+    // Background positions as percentages - like a camera panning
+    // These positions will show different parts of the larger background
     const positions = [
-      { x: 20, y: 30 },
-      { x: 70, y: 25 },
-      { x: 40, y: 60 },
-      { x: 60, y: 75 },
+      "63% 108%",
+      "30% 43%",
+      "17% -48%",
+      "31% 108%",
     ];
 
     let index = 0;
 
     const interval = setInterval(() => {
-      animate(x, positions[index].x, {
-        duration: 0.45,
-        ease: "easeInOut",
-      });
-
-      animate(y, positions[index].y, {
-        duration: 0.45,
-        ease: "easeInOut",
-      });
-
+      setBackgroundPosition(positions[index]);
       index = (index + 1) % positions.length;
     }, 500);
 
     return () => clearInterval(interval);
-  }, [x, y]);
+  }, []);
 
   useEffect(() => {
     const wordTimers = words.map((word, index) => {
@@ -54,25 +45,27 @@ function IntroSpotlight() {
     <div className="absolute w-full h-screen max-h-screen overflow-hidden">
       {/* Background layer - intro-bg.svg */}
       <div
-        className="absolute"
+        className="absolute inset-0 w-full h-full"
         style={{
-          willChange: "transform",
+          willChange: "background-position",
           transform: "translateZ(0)", // GPU acceleration
-          top: "-50%",
-          left: "-50%",
-          width: "200%",
-          height: "200%",
         }}
       >
         <motion.div
           className="w-full h-full"
+          animate={{
+            backgroundPosition: backgroundPosition,
+          }}
+          transition={{
+            duration: 0.45,
+            ease: "easeInOut",
+          }}
           style={{
             backgroundImage: `url(${introBg})`,
-            backgroundSize: "cover",
+            backgroundSize: "1000px auto", // Large background, auto height to maintain aspect ratio
             backgroundRepeat: "no-repeat",
-            backgroundPosition: "center center",
-            x,
-            y,
+            backgroundPosition: backgroundPosition,
+            scale:2 
           }}
         />
       </div>
