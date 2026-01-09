@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import introBg from "@/assets/intro-bg.svg";
 import coverSvg from "@/assets/cover.svg";
 
 const words = ["GET", "WHAT", "YOU", "NEED"];
 
+const WORD_DELAY = 800; // Increased from 500ms
+
 function IntroSpotlight() {
   const [displayedWords, setDisplayedWords] = useState<string[]>([]);
   const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     // Background positions as percentages - like a camera panning
@@ -23,8 +26,18 @@ function IntroSpotlight() {
 
     const interval = setInterval(() => {
       setBackgroundPosition(positions[index]);
-      index = (index + 1) % positions.length;
-    }, 500);
+      
+      // Check if this is the last position
+      if (index === positions.length - 1) {
+        // Hide component after showing the last position
+        setTimeout(() => {
+          setIsVisible(false);
+        }, 1000); // Wait for the transition to complete
+        clearInterval(interval);
+      } else {
+        index = index + 1;
+      }
+    }, 1000); // Increased from 500ms
 
     return () => clearInterval(interval);
   }, []);
@@ -33,7 +46,7 @@ function IntroSpotlight() {
     const wordTimers = words.map((word, index) => {
       return setTimeout(() => {
         setDisplayedWords((prev) => [...prev, word]);
-      }, (index + 1) * 500); // 500ms delay between each word
+      }, (index + 1) * WORD_DELAY); // Increased delay between each word
     });
 
     return () => {
@@ -42,7 +55,17 @@ function IntroSpotlight() {
   }, []);
 
   return (
-    <div className="absolute w-full h-screen max-h-screen overflow-hidden">
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          key="intro-spotlight"
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 0.9,
+            ease: [0.42, 0, 0.58, 1.0],
+          }}
+          className="absolute w-full h-screen max-h-screen overflow-hidden"
+        >
       {/* Background layer - intro-bg.svg */}
       <div
         className="absolute inset-0 w-full h-full"
@@ -57,7 +80,7 @@ function IntroSpotlight() {
             backgroundPosition: backgroundPosition,
           }}
           transition={{
-            duration: 0.45,
+            duration: 0.9, // Increased from 0.45s
             ease: "easeInOut",
           }}
           style={{
@@ -110,10 +133,10 @@ function IntroSpotlight() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{
-                duration: 0.4,
+                duration: 0.8, // Increased from 0.4s
                 ease: [0.42, 0, 0.58, 1.0],
                 layout: {
-                  duration: 0.3,
+                  duration: 0.6, // Increased from 0.3s
                   ease: [0.42, 0, 0.58, 1.0],
                 },
               }}
@@ -125,7 +148,9 @@ function IntroSpotlight() {
           ))}
         </h1>
       </div>
-    </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
