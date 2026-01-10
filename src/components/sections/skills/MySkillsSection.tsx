@@ -26,16 +26,13 @@ const MySkillsSection: React.FC<MySkillsSectionProps> = ({ skills }) => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Add a small delay before starting animation
-            setTimeout(() => {
-              setIsVisible(true);
-            }, 200);
+            setIsVisible(true);
           }
         });
       },
       { 
-        threshold: 0.5, // Require 50% of section to be visible
-        rootMargin: '0px 0px -100px 0px' // Trigger when section is 100px into viewport
+        threshold: 0.1, // Trigger when 10% of section is visible
+        rootMargin: '100px 0px 0px 0px' // Trigger 100px before section enters viewport
       }
     );
 
@@ -149,7 +146,7 @@ const MySkillsSection: React.FC<MySkillsSectionProps> = ({ skills }) => {
                 shouldAnimate
                   ? {
                       duration: 0.6,
-                      delay: 0.3 + ((index - 1) * 0.15), // Start with 0.3s base delay, then 0.15s between each card (excluding first)
+                      delay: (index - 1) * 0.1, // Small staggered delay between cards (0.1s between each)
                       ease: [0.42, 0, 0.58, 1.0],
                     }
                   : {}
