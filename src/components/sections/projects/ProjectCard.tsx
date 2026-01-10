@@ -7,9 +7,11 @@ interface ProjectCardProps {
   title: string;
   date: string;
   description: string;
+  image?: string;
+  url?: string;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ title, date, description }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ title, date, description, image, url }) => {
   return (
     <div className="relative flex items-start gap-4 ">
       {/* Left side - Vertical line with button */}
@@ -21,7 +23,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, date, description }) =
         />
         {/* Circular button on the line - positioned at center */}
         <img 
-            src={projectImgSVG} 
+            src={image || projectImgSVG} 
             alt={title} 
             className=" object-cover rounded-full absolute top-1/2 left-1/2 transform -translate-x-8 -translate-y-1/2 w-12 h-12"
           />
@@ -42,7 +44,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, date, description }) =
         {/* Center - Large project image/logo */}
         <div className="flex-1 flex items-center justify-center ">
           <img 
-            src={projectImgSVG} 
+            src={image || projectImgSVG} 
             alt={title} 
             className="max-w-full max-h-80 object-contain"
           />
@@ -53,9 +55,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, date, description }) =
           <p className="text-xs font-normal text-[#8E8E93]  leading-relaxed">
             {description}
           </p>
-        <button className="border-white border  flex items-center justify-center rounded-full">
+        {url && (
+          <a 
+            href={url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="border-white border  flex items-center justify-center rounded-full hover:opacity-80 transition-opacity"
+          >
             <CircleArrowRight className="w-6 h-6 text-black" fill='white'  />
-        </button>
+          </a>
+        )}
         </div>
       </div>
     </div>

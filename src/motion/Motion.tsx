@@ -9,6 +9,7 @@ const variantMap = {
   fadeIn: fade.fadeIn,
   fadeDown: fade.fadeDown,
   slideLeft: slide.slideLeft,
+  slideRight: slide.slideRight,
 };
 
 type MotionProps = {

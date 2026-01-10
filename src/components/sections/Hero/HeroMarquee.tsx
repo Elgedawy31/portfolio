@@ -1,19 +1,12 @@
 import { useEffect, useState } from "react";
 import { Motion } from "@/motion/Motion";
+import { useProfile } from "@/stores/ProfileContext";
 import starSvg from "@/assets/star.svg";
 
-const marqueeTexts = [
-  "Engineering with purpose",
-  "Leading through code",
-  "Scaling what matters",
-  "Tech made reliable",
-  "Solving the hard parts",
-  "Building for impact",
-  "Driving teams forward"
-];
-
 function HeroMarquee() {
+  const { profile } = useProfile();
   const [showMarquee, setShowMarquee] = useState(false);
+  const sliderTexts = profile?.slider || [];
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -21,15 +14,21 @@ function HeroMarquee() {
     }, 2100);
     return () => clearTimeout(timer);
   }, []);
+
+  // Don't render if no slider texts
+  if (!sliderTexts || sliderTexts.length === 0) {
+    return null;
+  }
+
   // Create the marquee content with stars between text items
   const marqueeContent: React.ReactNode[] = [];
-  marqueeTexts.forEach((text, index) => {
+  sliderTexts.forEach((text, index) => {
     marqueeContent.push(
       <span key={`text-${index}`} className="text-[#8E8E93] text-lg font-medium whitespace-nowrap">
         {text}
       </span>
     );
-    if (index < marqueeTexts.length - 1) {
+    if (index < sliderTexts.length - 1) {
       marqueeContent.push(
         <img 
           key={`star-${index}`} 
@@ -85,7 +84,7 @@ function HeroMarquee() {
           animation-delay: 300ms;
         }
       `}</style>
-      <div className="relative -top-10 marquee-wrapper">
+      <div className="relative -top-15 marquee-wrapper">
         <div className="marquee-container marquee-animation">
           {[...Array(4)].map((_, index) => (
             <div key={index} className="marquee-track">

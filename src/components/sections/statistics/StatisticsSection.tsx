@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Motion } from "@/motion/Motion";
+import type { EmployeeProfile } from "@/api/Api";
 
 interface StatisticItemProps {
   title: string;
@@ -29,13 +31,14 @@ const StatisticItem: React.FC<StatisticItemProps> = ({
       { threshold: 0.3 }
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const currentRef = ref.current;
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, [hasAnimated]);
@@ -84,46 +87,92 @@ const StatisticItem: React.FC<StatisticItemProps> = ({
   );
 };
 
-const StatisticsSection: React.FC = () => {
+interface StatisticsSectionProps {
+  profile?: EmployeeProfile | null;
+}
+
+const StatisticsSection: React.FC<StatisticsSectionProps> = ({ profile }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  // Calculate statistics from profile data
+  const completedProjects = profile?.projects?.length || 0;
+  
+  // Default values if profile data is not available
+  const clientsCount = 15; // Can be added to API later if needed
+
   const handleDownloadCV = () => {
-    // You can add your CV file path here
-    const cvUrl = "/cv.pdf"; // Update with your actual CV path
-    const link = document.createElement("a");
-    link.href = cvUrl;
-    link.download = "CV_Resume.pdf";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (!profile?.cv) {
+      console.error("CV not available");
+      return;
+    }
+
+    const cvUrl = profile.cv.secureUrl || profile.cv.url || profile.cv.viewUrl;
+    if (!cvUrl) {
+      console.error("CV URL not available");
+      return;
+    }
+
+    // Open CV in a new window
+    window.open(cvUrl, "_blank");
   };
 
   return (
-    <section className="relative py-12 px-4 bg-background">
-      <div className="max-w-4xl mx-auto">
-        <StatisticItem
-          title="WORLDWIDE CLIENTS IN 15 COUNTRIES"
-          value={15}
-          prefix="+"
-          description="Covers the Arab world and extends across Europe"
-        />
+    <section ref={sectionRef} className="relative py-12 px-4 bg-background">
+      <Motion show={isVisible} variant="fadeUp">
+        <div className="max-w-4xl mx-auto">
+          <StatisticItem
+            title="WORLDWIDE CLIENTS IN 15 COUNTRIES"
+            value={clientsCount}
+            prefix="+"
+            description="Covers the Arab world and extends across Europe"
+          />
 
-        <StatisticItem
-          title="Successfully Completed Projects"
-          value={20}
-          prefix="+"
-          description="Transforming an idea from nothing into a thriving launch is an incredible journey filled with challenges and triumphs."
-        />
+          <StatisticItem
+            title="Successfully Completed Projects"
+            value={completedProjects}
+            prefix="+"
+            description="Transforming an idea from nothing into a thriving launch is an incredible journey filled with challenges and triumphs."
+          />
 
-        <div className="mt-12 flex justify-center">
-          <div className="rounded-3xl p-px">
-            <button
-              onClick={handleDownloadCV}
-              className="relative px-10 py-4 bg-white/5 rounded-2xl text-white font-normal transition-all duration-200 text-base border-l-2 border-r-2 border-white/30  w-full"
-            >
-              Download my CV/Resume
-            </button>
-          </div>
+          {profile?.cv && (profile.cv.secureUrl || profile.cv.url || profile.cv.viewUrl) && (
+            <div className="mt-12 flex justify-center">
+              <div className="rounded-3xl p-px">
+                <button
+                  onClick={handleDownloadCV}
+                  className="relative px-10 py-4 bg-white/5 rounded-2xl text-white font-normal transition-all duration-200 text-base border-l-2 border-r-2 border-white/30  w-full"
+                >
+                  Download my CV/Resume
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
+      </Motion>
     </section>
   );
 };
