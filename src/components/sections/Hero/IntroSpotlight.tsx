@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Motion } from "@/motion/Motion";
+import { useIntro } from "@/stores/IntroContext";
 import introBg from "@/assets/intro-bg.svg";
 import coverSvg from "@/assets/cover.svg";
 
@@ -9,6 +10,7 @@ const words = ["GET", "WHAT", "YOU", "NEED"];
 const WORD_DELAY = 500; // Delay before word appears after position change starts
 
 function IntroSpotlight() {
+  const { setIntroFinished } = useIntro();
   const [displayedWords, setDisplayedWords] = useState<string[]>([]);
   const [wordsToAnimate, setWordsToAnimate] = useState<Set<string>>(new Set());
   const [backgroundPosition, setBackgroundPosition] = useState("50% 50%");
@@ -62,6 +64,10 @@ function IntroSpotlight() {
         // Hide component after showing the last position
         setTimeout(() => {
           setIsVisible(false);
+          // Notify that intro is finished after exit animation completes
+          setTimeout(() => {
+            setIntroFinished(true);
+          }, 900); // Wait for exit animation to complete
         }, 1000); // Wait for the transition to complete
         clearInterval(interval);
       } else {

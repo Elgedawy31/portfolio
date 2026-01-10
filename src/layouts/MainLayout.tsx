@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import { Header, Footer } from "@/components/common";
 import { ContactSection } from "@/components/sections/contact";
 import { ProfileProvider } from "@/stores/ProfileContext";
+import { IntroProvider } from "@/stores/IntroContext";
 import { getEmployeeProfile, type EmployeeProfile } from "@/api/Api";
 
 export default function MainLayout() {
@@ -26,18 +27,20 @@ export default function MainLayout() {
 
   return (
     <ProfileProvider profile={profile}>
-      <div className="min-h-screen  flex flex-col">
-        <Header />
+      <IntroProvider>
+        <div className="min-h-screen  flex flex-col">
+          <Header />
 
-        <main className=" max-w-7xl grow">
-          <Outlet />
-        </main>
-       <section className="bg-section-background">
-       {/* <TestimonialsSection /> */}
-        <ContactSection />
-        <Footer />
-       </section>
-      </div>
+          <main className=" max-w-7xl grow">
+            <Outlet />
+          </main>
+         <section className="bg-section-background">
+         {/* <TestimonialsSection /> */}
+          <ContactSection />
+          <Footer />
+         </section>
+        </div>
+      </IntroProvider>
     </ProfileProvider>
   );
 }
