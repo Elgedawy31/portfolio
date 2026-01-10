@@ -6,7 +6,7 @@ import { useIntro } from "@/stores/IntroContext";
 
 function Header() {
   const { profile } = useProfile();
-  const { isIntroFinished } = useIntro();
+  const { isHeroAnimationFinished } = useIntro();
   const profileImageUrl = profile?.profileImage?.url || profile?.profileImage?.secureUrl;
   const fullName = profile?.firstName && profile?.lastName 
     ? `${profile.firstName} ${profile.lastName}` 
@@ -68,7 +68,7 @@ function Header() {
   }, [profile, fullName, title, bio, profileImageUrl]);
 
   return (
-    <Motion show={isIntroFinished} variant="fadeDown" className="">
+    <Motion show={isHeroAnimationFinished} variant="fadeDown" className="">
       <header className="fixed top-0 left-0 right-0 z-50 p-4 bg-background/70 flex justify-between items-center  shadow-sm shadow-foreground/10">
         {profileImageUrl ? (
           <img 

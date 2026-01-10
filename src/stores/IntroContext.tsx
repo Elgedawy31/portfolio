@@ -4,11 +4,15 @@ import type { ReactNode } from 'react';
 interface IntroContextType {
   isIntroFinished: boolean;
   setIntroFinished: (finished: boolean) => void;
+  isHeroAnimationFinished: boolean;
+  setHeroAnimationFinished: (finished: boolean) => void;
 }
 
 const IntroContext = createContext<IntroContextType>({
   isIntroFinished: false,
   setIntroFinished: () => {},
+  isHeroAnimationFinished: false,
+  setHeroAnimationFinished: () => {},
 });
 
 export const IntroProvider = ({ 
@@ -17,9 +21,15 @@ export const IntroProvider = ({
   children: ReactNode; 
 }) => {
   const [isIntroFinished, setIntroFinished] = useState(false);
+  const [isHeroAnimationFinished, setHeroAnimationFinished] = useState(false);
 
   return (
-    <IntroContext.Provider value={{ isIntroFinished, setIntroFinished }}>
+    <IntroContext.Provider value={{ 
+      isIntroFinished, 
+      setIntroFinished,
+      isHeroAnimationFinished,
+      setHeroAnimationFinished
+    }}>
       {children}
     </IntroContext.Provider>
   );

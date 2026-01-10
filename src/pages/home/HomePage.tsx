@@ -8,12 +8,10 @@ import { useProfile } from "@/stores/ProfileContext"
 function HomePage() {
   const { profile } = useProfile()
   console.log(profile);
-  
 
   return (
     <div className="relative min-h-screen w-full">
-      <IntroSpotlight
-      />
+      <IntroSpotlight />
       <Hero />
       <MySkillsSection skills={profile?.skills} />
       <SelectedProjectsSection projects={profile?.projects} />
