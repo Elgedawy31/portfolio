@@ -6,6 +6,7 @@ import meSvg from "@/assets/banner/me.svg"
 import HeroText from "./HeroText"
 import HeroBio from "./HeroBio"
 import HeroImage from "./HeroImage"
+import HeroMarquee from "./HeroMarquee"
 
 function Hero() {
   const { profile } = useProfile()
@@ -80,6 +81,7 @@ function Hero() {
             startImageSlide={startImageSlide}
             onImageError={() => setImageError(true)}
           />
+          <HeroMarquee />
         </div>
       )}
     </div>
