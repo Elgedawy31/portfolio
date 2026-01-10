@@ -27,8 +27,9 @@ function IntroSpotlight() {
     let index = 0;
     const wordTimeouts: ReturnType<typeof setTimeout>[] = [];
 
-    // Process first word immediately with delay
+    // Process word with position change and animation
     const processWord = (currentIndex: number) => {
+      // Change background position to the position for this word
       setBackgroundPosition(positions[currentIndex]);
       
       // Add word to state immediately (but keep it hidden)
@@ -51,11 +52,7 @@ function IntroSpotlight() {
       wordTimeouts.push(wordTimeout);
     };
 
-    // Process first word immediately
-    processWord(0);
-    index = 1;
-
-    // Process remaining words at intervals
+    // Start processing words after initial delay, starting from first position
     const interval = setInterval(() => {
       const currentIndex = index; // Capture current index
       processWord(currentIndex);
@@ -158,7 +155,7 @@ function IntroSpotlight() {
               duration="normal"
               className="inline-block whitespace-nowrap"
             >
-              {word}
+              {word || "\u00A0"}
               {index < displayedWords.length - 1 && "\u00A0"}
             </Motion>
           ))}
