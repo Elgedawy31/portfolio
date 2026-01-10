@@ -3,13 +3,20 @@ import { motion } from 'framer-motion';
 import { SectionHeader } from '@/components/ui';
 import SkillCard from './SkillCard';
 import { LightbulbIcon } from '@/components/icons';
+import type { Skill } from '@/api/Api';
 
-const MySkillsSection: React.FC = () => {
+interface MySkillsSectionProps {
+  skills?: Skill[];
+}
+
+const MySkillsSection: React.FC<MySkillsSectionProps> = ({ skills }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [cardHeight, setCardHeight] = useState(200);
   const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const firstCardRef = useRef<HTMLDivElement>(null);
+
+  // Fixed card height - all cards will have the same height
+  const cardHeight = 180;
+  const gap = 16; // Gap between cards
 
   useEffect(() => {
     const currentSection = sectionRef.current;
@@ -19,16 +26,13 @@ const MySkillsSection: React.FC = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Add a small delay before starting animation
-            setTimeout(() => {
-              setIsVisible(true);
-            }, 200);
+            setIsVisible(true);
           }
         });
       },
       { 
-        threshold: 0.5, // Require 50% of section to be visible
-        rootMargin: '0px 0px -100px 0px' // Trigger when section is 100px into viewport
+        threshold: 0.1, // Trigger when 10% of section is visible
+        rootMargin: '100px 0px 0px 0px' // Trigger 100px before section enters viewport
       }
     );
 
@@ -39,14 +43,8 @@ const MySkillsSection: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (firstCardRef.current) {
-      const height = firstCardRef.current.offsetHeight;
-      setCardHeight(height);
-    }
-  }, []);
-
-  const cards = [
+  // Default cards if no skills provided
+  const defaultCards = [
     {
       icon: <LightbulbIcon className="w-3 h-3 text-white" />,
       title: 'MANAGEMENT',
@@ -69,33 +67,51 @@ const MySkillsSection: React.FC = () => {
     },
   ];
 
+  // Use skills from API if available, otherwise use default cards
+  const cards = skills && skills.length > 0
+    ? skills
+        .sort((a, b) => a.order - b.order) // Sort by order
+        .map((skill) => ({
+          icon: <LightbulbIcon className="w-3 h-3 text-white" />,
+          title: skill.name.toUpperCase(),
+          description: skill.description.toUpperCase(),
+        }))
+    : defaultCards;
+
+  // Calculate number of rows dynamically
+  const numberOfRows = Math.ceil(cards.length / 2);
+  const containerHeight = numberOfRows * (cardHeight + gap) - gap; // Subtract last gap
+
   return (
     <section ref={sectionRef} className="relative py-8 px-4">
       <SectionHeader
         title="MY SKILLS"
         description="A VERSATILE SET OF TECHNICAL AND CREATIVE SKILLS DEVELOPED THROUGH HANDS-ON EXPERIENCE AND CONTINUOUS LEARNING."
       />
-      <div ref={containerRef} className="relative mt-4" style={{ minHeight: '330px' }}>
+      <div ref={containerRef} className="relative mt-4" style={{ minHeight: `${containerHeight}px` }}>
         {cards.map((card, index) => {
           const col = index % 2;
           const row = Math.floor(index / 2);
           
           // Calculate final grid position
           // Each card takes 50% width minus half the gap
-          const cardWidth = 'calc(50% - 4px)';
-          const finalLeft = col === 0 ? '0%' : 'calc(50% + 4px)';
+          const cardWidth = `calc(50% - ${gap / 2}px)`;
+          const finalLeft = col === 0 ? '0%' : `calc(50% + ${gap / 2}px)`;
           
-          // Use measured card height for vertical positioning
-          const finalTop = row === 0 ? '0px' : `${row * (cardHeight + 8)}px`;
+          // Use fixed card height for vertical positioning with gap
+          const finalTop = row === 0 ? '0px' : `${row * (cardHeight + gap)}px`;
 
           // First card stays in place, others animate
           const isFirstCard = index === 0;
           const shouldAnimate = !isFirstCard && isVisible;
+          
+          // Set z-index: higher rows should be above lower rows
+          // Calculate z-index so top row has highest value, decreasing for each row
+          const zIndex = numberOfRows - row;
 
           return (
             <motion.div
               key={index}
-              ref={index === 0 ? firstCardRef : null}
               initial={{
                 position: 'absolute',
                 top: 0,
@@ -103,6 +119,7 @@ const MySkillsSection: React.FC = () => {
                 width: cardWidth,
                 opacity: 1, // All cards visible by default
                 scale: 1, // All cards at full scale by default
+                zIndex: zIndex,
               }}
               animate={
                 shouldAnimate
@@ -113,6 +130,7 @@ const MySkillsSection: React.FC = () => {
                       width: cardWidth,
                       opacity: 1,
                       scale: 1,
+                      zIndex: zIndex,
                     }
                   : {
                       position: 'absolute',
@@ -121,18 +139,20 @@ const MySkillsSection: React.FC = () => {
                       width: cardWidth,
                       opacity: 1,
                       scale: 1,
+                      zIndex: zIndex,
                     }
               }
               transition={
                 shouldAnimate
                   ? {
                       duration: 0.6,
-                      delay: 0.3 + ((index - 1) * 0.15), // Start with 0.3s base delay, then 0.15s between each card (excluding first)
+                      delay: (index - 1) * 0.1, // Small staggered delay between cards (0.1s between each)
                       ease: [0.42, 0, 0.58, 1.0],
                     }
                   : {}
               }
               className="absolute"
+              style={{ zIndex }}
             >
               <SkillCard
                 icon={card.icon}
