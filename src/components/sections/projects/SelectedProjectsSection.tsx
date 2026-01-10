@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { SectionHeader } from '@/components/ui';
 import ProjectCard from './ProjectCard';
+import { Motion } from '@/motion/Motion';
 import type { Project } from '@/api/Api';
 
 interface SelectedProjectsSectionProps {
@@ -8,6 +9,33 @@ interface SelectedProjectsSectionProps {
 }
 
 const SelectedProjectsSection: React.FC<SelectedProjectsSectionProps> = ({ projects }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = sectionRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
   // Default projects if no projects provided
   const defaultProjects = [
     {
@@ -58,23 +86,25 @@ const SelectedProjectsSection: React.FC<SelectedProjectsSectionProps> = ({ proje
     : defaultProjects;
 
   return (
-    <section className="relative py-8 px-4">
-      <SectionHeader
-        title="SELECTED PROJECTS"
-        description="A showcase of my recent work and projects, demonstrating my skills and expertise in software development."
-      />
-      <div className="mt-8">
-        {displayProjects.map((project, index) => (
-          <ProjectCard
-            key={index}
-            title={project.title}
-            date={project.date}
-            description={project.description}
-            image={project.image}
-            url={project.url}
-          />
-        ))}
-      </div>
+    <section ref={sectionRef} className="relative py-8 px-4">
+      <Motion show={isVisible} variant="fadeUp">
+        <SectionHeader
+          title="SELECTED PROJECTS"
+          description="A showcase of my recent work and projects, demonstrating my skills and expertise in software development."
+        />
+        <div className="mt-8">
+          {displayProjects.map((project, index) => (
+            <ProjectCard
+              key={index}
+              title={project.title}
+              date={project.date}
+              description={project.description}
+              image={project.image}
+              url={project.url}
+            />
+          ))}
+        </div>
+      </Motion>
     </section>
   );
 };
