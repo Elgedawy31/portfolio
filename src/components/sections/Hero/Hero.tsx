@@ -8,6 +8,8 @@ import HeroBio from "./HeroBio"
 import HeroImage from "./HeroImage"
 import HeroMarquee from "./HeroMarquee"
 import NameAnimation from "./NameAnimation"
+import AnimatedBlurBackground from "./AnimatedBlurBackground"
+import LocationInfo from "./LocationInfo"
 
 function Hero() {
   const { profile } = useProfile()
@@ -68,6 +70,7 @@ function Hero() {
       {/* Centered image and text - appears when intro finishes */}
       {isIntroFinished && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-40 pointer-events-none">
+          <AnimatedBlurBackground />
           <NameAnimation />
           {/* Text - fades down, then hides after 300ms */}
           <HeroText show={showText} isIntroFinished={isIntroFinished} />
@@ -84,6 +87,7 @@ function Hero() {
             onImageError={() => setImageError(true)}
           />
           <HeroMarquee />
+          <LocationInfo />
         </div>
       )}
     </div>
