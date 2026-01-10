@@ -12,12 +12,14 @@ function Hero() {
   const [imageError, setImageError] = useState(false)
   const [showText, setShowText] = useState(true)
   const [startImageSlide, setStartImageSlide] = useState(false)
+  const [showBio, setShowBio] = useState(false)
   const [slideDistance, setSlideDistance] = useState(0)
   const imageRef = useRef<HTMLDivElement>(null)
   const profileImageUrl = profile?.profileImage?.url || profile?.profileImage?.secureUrl
   const fullName = profile?.firstName && profile?.lastName 
     ? `${profile.firstName} ${profile.lastName}` 
     : ''
+  const bio = profile?.bio || ''
   
   // Determine which image to use
   const imageSrc = (profileImageUrl && !imageError) ? profileImageUrl : meSvg
@@ -65,11 +67,23 @@ function Hero() {
     }
   }, [isHeroAnimationFinished])
 
+  // Third: After image slide completes, show bio
+  useEffect(() => {
+    if (startImageSlide && bio) {
+      // Wait for image slide animation to complete
+      const timer = setTimeout(() => {
+        setShowBio(true)
+      }, motionTokens.duration.normal * 1000)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [startImageSlide, bio])
+
   return (
     <div className="relative min-h-screen overflow-hidden pt-44 px-4">
       {/* Centered image and text - appears when intro finishes */}
       {isIntroFinished && (
-        <div className="fixed inset-0 flex flex-col items-center justify-center z-40 pointer-events-none">
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-40 pointer-events-none">
           {/* Text - fades down, then hides after 300ms */}
           {showText && (
             <Motion show={isIntroFinished} variant="fadeDown" className="mb-4">
@@ -79,7 +93,34 @@ function Hero() {
             </Motion>
           )}
           
-          {/* Image - fades in, then slides right and up after header is visible */}
+          {/* Bio - appears after image slides, positioned absolutely at the left edge */}
+          {showBio && bio && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity: showBio ? 1 : 0,
+                y: startImageSlide ? -100 : 0,
+              }}
+              transition={{
+                opacity: {
+                  duration: motionTokens.duration.normal,
+                  ease: [0.42, 0, 0.58, 1.0],
+                },
+                y: {
+                  duration: motionTokens.duration.normal,
+                  ease: [0.42, 0, 0.58, 1.0],
+                  delay: startImageSlide ? 0 : 0,
+                },
+              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2"
+            >
+              <p className="text-white text-[14px] font-light h-[216px] overflow-hidden capitalize z-10 w-1/2">
+                {bio}
+              </p>
+            </motion.div>
+          )}
+
+          {/* Container for image - moves */}
           <motion.div
             ref={imageRef}
             initial={{ opacity: 0, x: 0, y: 0 }}
@@ -104,8 +145,9 @@ function Hero() {
                 delay: startImageSlide ? 0 : 0,
               },
             }}
-            className=""
+            className="relative inline-block"
           >
+            {/* Image - always visible */}
             <img
               src={imageSrc}
               alt={fullName || "Profile"}
