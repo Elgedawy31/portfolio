@@ -98,19 +98,19 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({ profile }) => {
   const clientsCount = 15; // Can be added to API later if needed
 
   const handleDownloadCV = () => {
-    const cvUrl = profile?.cv?.url || profile?.cv?.secureUrl || profile?.cv?.viewUrl;
-    
+    if (!profile?.cv) {
+      console.error("CV not available");
+      return;
+    }
+
+    const cvUrl = profile.cv.secureUrl || profile.cv.url || profile.cv.viewUrl;
     if (!cvUrl) {
       console.error("CV URL not available");
       return;
     }
 
-    // فتح الملف في تبويب جديد
-    const newWindow = window.open(cvUrl, "_blank", "noopener,noreferrer");
-    if (!newWindow) {
-      // إذا فشل فتح تبويب جديد (مثل popup blocker)، افتح في نفس التبويب
-      window.location.href = cvUrl;
-    }
+    // Open CV in a new window
+    window.open(cvUrl, "_blank");
   };
 
   return (
@@ -130,16 +130,18 @@ const StatisticsSection: React.FC<StatisticsSectionProps> = ({ profile }) => {
           description="Transforming an idea from nothing into a thriving launch is an incredible journey filled with challenges and triumphs."
         />
 
-        <div className="mt-12 flex justify-center">
-          <div className="rounded-3xl p-px">
-            <button
-              onClick={handleDownloadCV}
-              className="relative px-10 py-4 bg-white/5 rounded-2xl text-white font-normal transition-all duration-200 text-base border-l-2 border-r-2 border-white/30  w-full"
-            >
-              Download my CV/Resume
-            </button>
+        {profile?.cv && (profile.cv.secureUrl || profile.cv.url || profile.cv.viewUrl) && (
+          <div className="mt-12 flex justify-center">
+            <div className="rounded-3xl p-px">
+              <button
+                onClick={handleDownloadCV}
+                className="relative px-10 py-4 bg-white/5 rounded-2xl text-white font-normal transition-all duration-200 text-base border-l-2 border-r-2 border-white/30  w-full"
+              >
+                Download my CV/Resume
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

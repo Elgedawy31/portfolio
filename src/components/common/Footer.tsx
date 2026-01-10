@@ -1,4 +1,4 @@
-import { Facebook, Linkedin, Github } from '../icons';
+import { Linkedin, Mail, MessageCircle } from 'lucide-react';
 import { useProfile } from '@/stores/ProfileContext';
 
 function Footer() {
@@ -7,11 +7,9 @@ function Footer() {
   // استخراج روابط Social Media من contact array
   const getSocialLinks = () => {
     const links = {
-      email: 'elgedawyahmed333@gmail.com',
-      phone: '+971 50 976 6001',
-      linkedin: 'https://linkedin.com',
-      facebook: 'https://facebook.com', // Fake data - default Facebook link
-      github: 'https://github.com' // Fake data - default GitHub link
+      email: '',
+      phone: '',
+      linkedin: ''
     };
     
     profile?.contact?.forEach((contact) => {
@@ -22,10 +20,6 @@ function Footer() {
         links.phone = contact;
       } else if (lowerContact.includes('linkedin')) {
         links.linkedin = contact.startsWith('http') ? contact : `https://${contact}`;
-      } else if (lowerContact.includes('facebook') || lowerContact.includes('fb')) {
-        links.facebook = contact.startsWith('http') ? contact : `https://${contact}`;
-      } else if (lowerContact.includes('github')) {
-        links.github = contact.startsWith('http') ? contact : `https://${contact}`;
       }
     });
     
@@ -34,12 +28,21 @@ function Footer() {
   
   const socialLinks = getSocialLinks();
   
-  const handleSendWhatsappMessage = () => {
-    const phone = socialLinks.phone?.replace(/\D/g, ''); // إزالة كل شيء ما عدا الأرقام
+  const handleSendEmail = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (socialLinks.email) {
+      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(socialLinks.email)}`, '_blank');
+    }
+  };
+
+  const handleSendWhatsappMessage = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const phone = socialLinks.phone?.replace(/\D/g, '');
+    const name = profile?.firstName || 'there';
+    const message = encodeURIComponent(`hi ${name} !`);
+    
     if (phone) {
-      window.open(`https://wa.me/${phone}`, '_blank');
-    } else {
-      window.open('https://wa.me/201003098950', '_blank');
+      window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
     }
   };
   
@@ -47,15 +50,18 @@ function Footer() {
     <footer className="text-footer-text flex flex-col items-center justify-center space-y-4 mb-4">
       <h3 className="text-lg font-semibold text-center ">You can Find me there </h3>
       <div className="flex space-x-6">
-        <a 
-          href={socialLinks.facebook} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          aria-label="Facebook" 
-          className="hover:text-brand transition-colors duration-300"
-        >
-          <Facebook className="w-6 h-6" />
-        </a>
+        {socialLinks.email && (
+          <a 
+            onClick={handleSendEmail}
+            href="#"
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label="Email" 
+            className="hover:text-brand transition-colors duration-300 cursor-pointer"
+          >
+            <Mail className="w-6 h-6" />
+          </a>
+        )}
         {socialLinks.linkedin && (
           <a 
             href={socialLinks.linkedin} 
@@ -67,17 +73,20 @@ function Footer() {
             <Linkedin className="w-6 h-6" />
           </a>
         )}
-        <a 
-          href={socialLinks.github} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          aria-label="GitHub" 
-          className="hover:text-brand transition-colors duration-300"
-        >
-          <Github className="w-6 h-6" />
-        </a>
+        {socialLinks.phone && (
+          <a 
+            onClick={handleSendWhatsappMessage}
+            href="#"
+            target="_blank" 
+            rel="noopener noreferrer"
+            aria-label="WhatsApp" 
+            className="hover:text-brand transition-colors duration-300 cursor-pointer"
+          >
+            <MessageCircle className="w-6 h-6" />
+          </a>
+        )}
       </div>
-      <p className="text-sm cursor-pointer" onClick={handleSendWhatsappMessage}>
+      <p className="text-sm">
         &copy; {new Date().getFullYear()} Auvnet
       </p>
     </footer>
