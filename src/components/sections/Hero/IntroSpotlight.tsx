@@ -72,13 +72,13 @@ function IntroSpotlight() {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          key="intro-spotlight"
+          key="intro-spotlight "
           exit={{ opacity: 0 }}
           transition={{
             duration: 0.9,
             ease: [0.42, 0, 0.58, 1.0],
           }}
-          className="absolute w-full h-screen max-h-screen overflow-hidden"
+          className="fixed z-99999 w-full bg-background h-screen max-h-screen overflow-hidden"
         >
       {/* Background layer - intro-bg.svg */}
       <div
