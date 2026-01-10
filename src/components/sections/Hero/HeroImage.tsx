@@ -19,8 +19,9 @@ function HeroImage({
 }: HeroImageProps) {
   const imageRef = useRef<HTMLDivElement>(null)
   const [slideDistance, setSlideDistance] = useState(0)
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
 
-  // Calculate slide distance to position image on right with spacing
+  // Calculate slide distance and check screen size
   useEffect(() => {
     const calculateSlideDistance = () => {
       const imageWidth = 163 // Image width in pixels
@@ -29,6 +30,9 @@ function HeroImage({
       // Distance from center to right edge with padding
       const distance = (viewportWidth / 2) - (imageWidth / 2) - padding
       setSlideDistance(distance)
+      
+      // Check if screen width is less than 400px
+      setIsSmallScreen(viewportWidth < 400)
     }
 
     calculateSlideDistance()
@@ -62,7 +66,7 @@ function HeroImage({
           delay: startImageSlide ? 0 : 0,
         },
       }}
-      className="relative inline-block"
+      className={`relative inline-block ${isSmallScreen ? 'mt-8' : 'mt-4'}`}
     >
       <img
         src={imageSrc}
