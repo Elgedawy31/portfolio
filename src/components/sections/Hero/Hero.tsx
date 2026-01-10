@@ -66,7 +66,7 @@ function Hero() {
   }, [startImageSlide, bio])
 
   return (
-    <div className="relative min-h-screen overflow-hidden pt-0 px-4">
+    <div className="relative min-h-[1000px] overflow-hidden pt-0 px-4">
       {/* Centered image and text - appears when intro finishes */}
       {isIntroFinished && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-40 pointer-events-none">
