@@ -26,7 +26,7 @@ function CreateYour() {
     <Motion animateOnMount={showContent} variant="fadeDown">
         <h1 className="text-[40px] font-bold uppercase flex items-center">
           <span className="">Create</span>
-          <img src={CreateYourSVG} alt="create your" className={`inline-block ml-4 mr-4 h-[46px] transition-all duration-500 ${animateImage ? 'w-[52px] opacity-100' : 'w-0 opacity-0'}`} />
+          <img src={CreateYourSVG} alt="create your" className={`inline-block ml-4 mr-4 h-[46px] transition-all duration-1000 ${animateImage ? 'w-[50vw] opacity-100' : 'w-0 opacity-0'}`} />
           <span >Your</span>
         </h1>
     </Motion> 
