@@ -26,7 +26,7 @@ function HeroBio({ bio, showBio, startImageSlide }: HeroBioProps) {
       className="absolute left-4 top-1/2 -translate-y-1/2"
     >
       <Motion show={showBio} variant="fadeIn">
-        <p className="text-white text-[14px] font-light h-[216px] overflow-hidden capitalize z-10 w-[45%]">
+        <p className="text-white text-[14px] font-light line-clamp-10 capitalize z-10 w-[45%]">
           {bio}
         </p>
       </Motion>
