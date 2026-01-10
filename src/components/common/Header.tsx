@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Motion } from "@/motion/Motion";
 import { DotsGridSVG } from '../ui';
 import { useProfile } from "@/stores/ProfileContext";
@@ -7,6 +7,7 @@ import { useIntro } from "@/stores/IntroContext";
 function Header() {
   const { profile } = useProfile();
   const { isHeroAnimationFinished } = useIntro();
+  const [startInnerAnimation, setStartInnerAnimation] = useState(false);
   const profileImageUrl = profile?.profileImage?.url || profile?.profileImage?.secureUrl;
   const fullName = profile?.firstName && profile?.lastName 
     ? `${profile.firstName} ${profile.lastName}` 
@@ -67,21 +68,36 @@ function Header() {
     }
   }, [profile, fullName, title, bio, profileImageUrl]);
 
+  // Start inner animations 300ms after header appears
+  useEffect(() => {
+    if (isHeroAnimationFinished) {
+      const timer = setTimeout(() => {
+        setStartInnerAnimation(true);
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isHeroAnimationFinished]);
+
   return (
     <Motion show={isHeroAnimationFinished} variant="fadeDown" className="">
       <header className="fixed top-0 left-0 right-0 z-50 p-4 bg-background/70 flex justify-between items-center  shadow-sm shadow-foreground/10">
-        {profileImageUrl ? (
-          <img 
-            src={profileImageUrl} 
-            alt={`${profile?.firstName} ${profile?.lastName}`}
-            className="w-8 h-8 rounded-full object-cover"
-          />
-        ) : (
-          <div className="w-8 h-8 bg-foreground rounded-full"></div>
-        )}
+        <Motion show={startInnerAnimation} variant="fadeIn" className="">
+          {profileImageUrl ? (
+            <img 
+              src={profileImageUrl} 
+              alt={`${profile?.firstName} ${profile?.lastName}`}
+              className="w-8 h-8 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-8 h-8 bg-foreground rounded-full"></div>
+          )}
+        </Motion>
         
         <div className="flex items-center">
-          <DotsGridSVG />
+          <Motion show={startInnerAnimation} variant="fadeIn" className="">
+            <DotsGridSVG />
+          </Motion>
         </div>
       </header>
     </Motion>
