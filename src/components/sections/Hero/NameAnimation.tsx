@@ -7,6 +7,7 @@ function NameAnimation() {
   const { profile } = useProfile();
   const [showName, setShowName] = useState(false);
   const [showTitle, setShowTitle] = useState(false);
+  const [topPosition, setTopPosition] = useState('112px');
 
   const firstName = profile?.firstName || '';
   const lastName = profile?.lastName || '';
@@ -36,12 +37,30 @@ function NameAnimation() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Adjust top position based on screen size
+  useEffect(() => {
+    const updatePosition = () => {
+      const width = window.innerWidth
+      if (width < 390) {
+        // On small screens, position lower to avoid overlap
+        setTopPosition('80px')
+      } else {
+        setTopPosition('112px')
+      }
+    }
+
+    updatePosition()
+    window.addEventListener('resize', updatePosition)
+    return () => window.removeEventListener('resize', updatePosition)
+  }, [])
+
   return (
     <div 
-      className="absolute left-4 top-[112px] sm:left-4 sm:top-[112px] md:left-4 md:top-[112px]"
+      className="absolute left-4 z-50"
+      style={{ top: topPosition }}
     >
       <h1 
-        className="text-[36px] font-bold uppercase text-white leading-tight flex flex-wrap"
+        className="text-[28px] sm:text-[32px] md:text-[36px] font-bold uppercase text-white leading-tight flex flex-wrap"
         style={{
           fontFamily: 'Montserrat, sans-serif',
           fontWeight: 800,
@@ -68,12 +87,12 @@ function NameAnimation() {
         <Motion show={showTitle} variant="fadeUp" className="">
           <div className="">
             {titleFirstPart && (
-              <p className="text-[20px] text-[#8E8E93] uppercase tracking-wider leading-relaxed">
+              <p className="text-[16px] sm:text-[18px] md:text-[20px] text-[#8E8E93] uppercase tracking-wider leading-relaxed">
                 {titleFirstPart}
               </p>
             )}
             {titleSecondPart && (
-              <p className="text-[20px] text-[#8E8E93] uppercase tracking-wider">
+              <p className="text-[16px] sm:text-[18px] md:text-[20px] text-[#8E8E93] uppercase tracking-wider">
                 {titleSecondPart}
               </p>
             )}

@@ -84,7 +84,7 @@ function HeroMarquee() {
           animation-delay: 300ms;
         }
       `}</style>
-      <div className="relative -top-20 marquee-wrapper">
+      <div className="relative -top-15 marquee-wrapper">
         <div className="marquee-container marquee-animation">
           {[...Array(4)].map((_, index) => (
             <div key={index} className="marquee-track">
