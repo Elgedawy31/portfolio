@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { Motion } from "@/motion/Motion"
 import { useProfile } from "@/stores/ProfileContext"
@@ -12,6 +12,8 @@ function Hero() {
   const [imageError, setImageError] = useState(false)
   const [showText, setShowText] = useState(true)
   const [startImageSlide, setStartImageSlide] = useState(false)
+  const [slideDistance, setSlideDistance] = useState(0)
+  const imageRef = useRef<HTMLDivElement>(null)
   const profileImageUrl = profile?.profileImage?.url || profile?.profileImage?.secureUrl
   const fullName = profile?.firstName && profile?.lastName 
     ? `${profile.firstName} ${profile.lastName}` 
@@ -19,6 +21,23 @@ function Hero() {
   
   // Determine which image to use
   const imageSrc = (profileImageUrl && !imageError) ? profileImageUrl : meSvg
+
+  // Calculate slide distance to position image on right with spacing
+  useEffect(() => {
+    const calculateSlideDistance = () => {
+      const imageWidth = 163 // Image width in pixels
+      const padding = 16 // 1rem = 16px spacing from right
+      const viewportWidth = window.innerWidth
+      // Distance from center to right edge with padding
+      const distance = (viewportWidth / 2) - (imageWidth / 2) - padding
+      setSlideDistance(distance)
+    }
+
+    calculateSlideDistance()
+    window.addEventListener('resize', calculateSlideDistance)
+    
+    return () => window.removeEventListener('resize', calculateSlideDistance)
+  }, [])
 
   // First: Show hero text and image, then notify header can appear
   useEffect(() => {
@@ -60,12 +79,14 @@ function Hero() {
             </Motion>
           )}
           
-          {/* Image - fades in, then slides right after 300ms */}
+          {/* Image - fades in, then slides right and up after header is visible */}
           <motion.div
-            initial={{ opacity: 0 }}
+            ref={imageRef}
+            initial={{ opacity: 0, x: 0, y: 0 }}
             animate={{
               opacity: isIntroFinished ? 1 : 0,
-              x: startImageSlide ? 200 : 0,
+              x: startImageSlide ? slideDistance : 0,
+              y: startImageSlide ? -100 : 0,
             }}
             transition={{
               opacity: {
@@ -73,6 +94,11 @@ function Hero() {
                 ease: [0.42, 0, 0.58, 1.0],
               },
               x: {
+                duration: motionTokens.duration.normal,
+                ease: [0.42, 0, 0.58, 1.0],
+                delay: startImageSlide ? 0 : 0,
+              },
+              y: {
                 duration: motionTokens.duration.normal,
                 ease: [0.42, 0, 0.58, 1.0],
                 delay: startImageSlide ? 0 : 0,
