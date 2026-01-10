@@ -1,10 +1,24 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Motion } from "@/motion/Motion";
+import { useProfile } from "@/stores/ProfileContext";
 
 function NameAnimation() {
+  const { profile } = useProfile();
   const [showName, setShowName] = useState(false);
   const [showTitle, setShowTitle] = useState(false);
+
+  const firstName = profile?.firstName || '';
+  const lastName = profile?.lastName || '';
+  const fullName = firstName && lastName ? `${firstName} ${lastName}` : '';
+  const text = fullName ? `I'M ${fullName.toUpperCase()}` : "I'M";
+  const letters = text.split("");
+
+  // Split title by "&" for display
+  const title = profile?.title || '';
+  const titleParts = title ? title.split('&').map(part => part.trim()) : [];
+  const titleFirstPart = titleParts[0] || '';
+  const titleSecondPart = titleParts.length > 1 ? `& ${titleParts.slice(1).join(' & ')}` : '';
 
   useEffect(() => {
     // Start animation after CreateYour, Feature, WithMe animations complete (1200ms)
@@ -21,9 +35,6 @@ function NameAnimation() {
     }, 2500);
     return () => clearTimeout(timer);
   }, []);
-
-  const text = "I'M AHMED ROYALE";
-  const letters = text.split("");
 
   return (
     <div 
@@ -53,16 +64,22 @@ function NameAnimation() {
         ))}
       </h1>
       
-      <Motion show={showTitle} variant="fadeUp" className="">
-        <div className="">
-          <p className="text-[20px] text-[#8E8E93] uppercase tracking-wider leading-relaxed">
-            A SENIOR SOFTWARE ENGINEER
-          </p>
-          <p className="text-[20px] text-[#8E8E93] uppercase tracking-wider">
-            & TECH LEAD
-          </p>
-        </div>
-      </Motion>
+      {title && (
+        <Motion show={showTitle} variant="fadeUp" className="">
+          <div className="">
+            {titleFirstPart && (
+              <p className="text-[20px] text-[#8E8E93] uppercase tracking-wider leading-relaxed">
+                {titleFirstPart}
+              </p>
+            )}
+            {titleSecondPart && (
+              <p className="text-[20px] text-[#8E8E93] uppercase tracking-wider">
+                {titleSecondPart}
+              </p>
+            )}
+          </div>
+        </Motion>
+      )}
     </div>
   );
 }
