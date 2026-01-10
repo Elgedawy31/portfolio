@@ -6,7 +6,7 @@ import coverSvg from "@/assets/cover.svg";
 
 const words = ["GET", "WHAT", "YOU", "NEED"];
 
-const WORD_DELAY = 8000; // Delay before word appears after position change starts
+const WORD_DELAY = 500; // Delay before word appears after position change starts
 
 function IntroSpotlight() {
   const [displayedWords, setDisplayedWords] = useState<string[]>([]);
@@ -27,8 +27,8 @@ function IntroSpotlight() {
     let index = 0;
     const wordTimeouts: ReturnType<typeof setTimeout>[] = [];
 
-    const interval = setInterval(() => {
-      const currentIndex = index; // Capture current index
+    // Process first word immediately with delay
+    const processWord = (currentIndex: number) => {
       setBackgroundPosition(positions[currentIndex]);
       
       // Add word to state immediately (but keep it hidden)
@@ -49,6 +49,16 @@ function IntroSpotlight() {
       }, WORD_DELAY);
       
       wordTimeouts.push(wordTimeout);
+    };
+
+    // Process first word immediately
+    processWord(0);
+    index = 1;
+
+    // Process remaining words at intervals
+    const interval = setInterval(() => {
+      const currentIndex = index; // Capture current index
+      processWord(currentIndex);
       
       // Check if this is the last position
       if (currentIndex === positions.length - 1) {
@@ -60,7 +70,7 @@ function IntroSpotlight() {
       } else {
         index = index + 1;
       }
-    }, 1000); // Increased from 500ms
+    }, 1000); // Interval between position changes
 
     return () => {
       clearInterval(interval);
@@ -72,13 +82,13 @@ function IntroSpotlight() {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          key="intro-spotlight "
+          key="intro-spotlight"
           exit={{ opacity: 0 }}
           transition={{
             duration: 0.9,
             ease: [0.42, 0, 0.58, 1.0],
           }}
-          className="fixed z-99999 w-full bg-background h-screen max-h-screen overflow-hidden"
+          className="absolute w-full h-screen max-h-screen overflow-hidden"
         >
       {/* Background layer - intro-bg.svg */}
       <div
@@ -138,8 +148,8 @@ function IntroSpotlight() {
       </div>
 
       {/* Animated text - top center */}
-      <div className="absolute top-32 left-1/2 transform -translate-x-1/2 z-20 pt-8 sm:pt-12 md:pt-16">
-        <h1 className="text-white text-[20px] font-extrabold uppercase tracking-wide flex items-center justify-center flex-wrap">
+      <div className="absolute top-32 left-1/2 transform -translate-x-1/2 z-50 pt-8 sm:pt-12 md:pt-16 pointer-events-none">
+        <h1 className="text-white text-[20px] font-extrabold uppercase tracking-wide flex items-center justify-center flex-wrap drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
           {displayedWords.map((word, index) => (
             <Motion
               key={`${word}-${index}`}
