@@ -8,6 +8,8 @@ const SECOND_WORD = "WHAT YOU WANT";
 const SCALE_DURATION = 0.8; // seconds to scale from 12 to 1
 const TEXT_CHANGE_DELAY = 0.15; // delay after scale reaches 1
 const SECOND_WORD_EXPAND_DURATION = 0.4; // duration for second word to expand
+const BG_CHANGE_DELAY = 0.3; // delay after second word appears
+const BG_CHANGE_DURATION = 0.6; // duration for background color change from bottom to top
 const FADE_DURATION = 0.4; // seconds to fade out
 
 function IntroSpotlightDesktop() {
@@ -15,18 +17,26 @@ function IntroSpotlightDesktop() {
   const [visible, setVisible] = useState(true);
   const [showWord, setShowWord] = useState(false);
   const [showSecondWord, setShowSecondWord] = useState(false);
+  const [showBgChange, setShowBgChange] = useState(false);
+  const [textColor, setTextColor] = useState("#000000");
 
   useEffect(() => {
     // Show word after a brief moment
     const showTimer = setTimeout(() => setShowWord(true), 50);
     
-    // After scale completes, show "WHAT YOU WANT" with width expansion (last animation)
+    // After scale completes, show "WHAT YOU WANT" with width expansion
     const textTimer = setTimeout(() => {
       setShowSecondWord(true);
     }, SCALE_DURATION * 1000 + TEXT_CHANGE_DELAY * 1000);
 
-    // After second word appears, hide and finish intro
-    const totalDuration = (SCALE_DURATION + TEXT_CHANGE_DELAY + SECOND_WORD_EXPAND_DURATION + FADE_DURATION) * 1000;
+    // After second word appears, trigger background change from bottom to top
+    const bgChangeTimer = setTimeout(() => {
+      setShowBgChange(true);
+      setTextColor("#FFFFFF"); // Change text color to white when background changes
+    }, SCALE_DURATION * 1000 + TEXT_CHANGE_DELAY * 1000 + SECOND_WORD_EXPAND_DURATION * 1000 + BG_CHANGE_DELAY * 1000);
+
+    // After background change completes, hide and finish intro
+    const totalDuration = (SCALE_DURATION + TEXT_CHANGE_DELAY + SECOND_WORD_EXPAND_DURATION + BG_CHANGE_DELAY + BG_CHANGE_DURATION + FADE_DURATION) * 1000;
     const hideTimer = setTimeout(() => {
       setVisible(false);
       setTimeout(() => setIntroFinished(true), FADE_DURATION * 1000);
@@ -35,6 +45,7 @@ function IntroSpotlightDesktop() {
     return () => {
       clearTimeout(showTimer);
       clearTimeout(textTimer);
+      clearTimeout(bgChangeTimer);
       clearTimeout(hideTimer);
     };
   }, [setIntroFinished]);
@@ -50,6 +61,25 @@ function IntroSpotlightDesktop() {
             opacity: { duration: FADE_DURATION }
           }}
         >
+          {/* Background color change overlay - animates from bottom to top */}
+          {showBgChange && (
+            <motion.div
+              className="absolute bottom-0 left-0 right-0 bg-[#111111]"
+              initial={{ 
+                height: "0%",
+              }}
+              animate={{ 
+                height: "100%",
+              }}
+              transition={{
+                height: {
+                  duration: BG_CHANGE_DURATION,
+                  ease: [0, 0, 0.58, 1], // ease-out
+                },
+              }}
+              style={{ originY: 1 }}
+            />
+          )}
           {showWord && (
             <Motion
               variant="fadeIn"
@@ -58,14 +88,14 @@ function IntroSpotlightDesktop() {
               duration="normal"
             >
               <motion.h1
-                className="font-normal uppercase tracking-wide select-none text-[96px] flex items-center whitespace-nowrap text-black"
+                className="font-normal uppercase tracking-wide select-none text-[96px] flex items-center whitespace-nowrap relative z-10"
                 initial={{ 
                   scale: 12,
                   color: "#00000033",
                 }}
                 animate={{ 
                   scale: 1,
-                  color: "#000000",
+                  color: textColor,
                 }}
                 transition={{
                   scale: {
@@ -73,7 +103,8 @@ function IntroSpotlightDesktop() {
                     ease: [0.42, 0, 0.58, 1],
                   },
                   color: {
-                    duration: SCALE_DURATION,
+                    duration: BG_CHANGE_DURATION * 0.5,
+                    ease: [0, 0, 0.58, 1],
                   },
                 }}
               >
