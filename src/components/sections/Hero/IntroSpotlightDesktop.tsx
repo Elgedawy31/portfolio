@@ -5,10 +5,10 @@ import { useIntro } from "@/stores/IntroContext";
 
 const INITIAL_WORD = "GET";
 const SECOND_WORD = "WHAT YOU WANT";
-const SCALE_DURATION = 1.5; // seconds to scale from 12 to 1
-const TEXT_CHANGE_DELAY = 0.3; // delay after scale reaches 1
-const SECOND_WORD_EXPAND_DURATION = 0.6; // duration for second word to expand
-const FADE_DURATION = 0.6; // seconds to fade out
+const SCALE_DURATION = 0.8; // seconds to scale from 12 to 1
+const TEXT_CHANGE_DELAY = 0.15; // delay after scale reaches 1
+const SECOND_WORD_EXPAND_DURATION = 0.4; // duration for second word to expand
+const FADE_DURATION = 0.4; // seconds to fade out
 
 function IntroSpotlightDesktop() {
   const { setIntroFinished } = useIntro();
@@ -58,7 +58,7 @@ function IntroSpotlightDesktop() {
               duration="normal"
             >
               <motion.h1
-                className="font-normal uppercase tracking-wide select-none text-[8rem] flex items-center whitespace-nowrap text-black"
+                className="font-normal uppercase tracking-wide select-none text-[96px] flex items-center whitespace-nowrap text-black"
                 initial={{ 
                   scale: 12,
                   color: "#00000033",
@@ -73,7 +73,7 @@ function IntroSpotlightDesktop() {
                     ease: [0.42, 0, 0.58, 1],
                   },
                   color: {
-                    duration: SCALE_DURATION + 0.5,
+                    duration: SCALE_DURATION,
                   },
                 }}
               >
@@ -91,12 +91,12 @@ function IntroSpotlightDesktop() {
                     }}
                     transition={{
                       opacity: {
-                        duration: 0.3,
-                        delay: SECOND_WORD_EXPAND_DURATION * 0.5,
+                        duration: 0.2,
+                        delay: SECOND_WORD_EXPAND_DURATION * 0.3,
                       },
                       maxWidth: {
                         duration: SECOND_WORD_EXPAND_DURATION,
-                        ease: [0.42, 0, 0.58, 1],
+                        ease: [0, 0, 0.58, 1], // ease-out
                       },
                     }}
                   >
