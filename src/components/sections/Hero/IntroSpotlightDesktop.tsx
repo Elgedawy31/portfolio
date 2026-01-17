@@ -7,8 +7,7 @@ const INITIAL_WORD = "GET";
 const SECOND_WORD = "WHAT YOU WANT";
 const SCALE_DURATION = 1.5; // seconds to scale from 12 to 1
 const TEXT_CHANGE_DELAY = 0.3; // delay after scale reaches 1
-const COLOR_CHANGE_DELAY = 0.4; // delay after scale reaches 1 (400ms)
-const BG_CHANGE_DURATION = 0.6; // seconds to change background and color
+const SECOND_WORD_EXPAND_DURATION = 0.6; // duration for second word to expand
 const FADE_DURATION = 0.6; // seconds to fade out
 
 function IntroSpotlightDesktop() {
@@ -16,26 +15,18 @@ function IntroSpotlightDesktop() {
   const [visible, setVisible] = useState(true);
   const [showWord, setShowWord] = useState(false);
   const [showSecondWord, setShowSecondWord] = useState(false);
-  const [backgroundColor, setBackgroundColor] = useState("#EBEBEB");
-  const [textColor, setTextColor] = useState("#000000");
 
   useEffect(() => {
     // Show word after a brief moment
     const showTimer = setTimeout(() => setShowWord(true), 50);
     
-    // After scale completes, show "WHAT YOU WANT"
+    // After scale completes, show "WHAT YOU WANT" with width expansion (last animation)
     const textTimer = setTimeout(() => {
       setShowSecondWord(true);
     }, SCALE_DURATION * 1000 + TEXT_CHANGE_DELAY * 1000);
 
-    // After text appears, change background and text color (400ms after scale completes)
-    const colorTimer = setTimeout(() => {
-      setBackgroundColor("#111111");
-      setTextColor("#FFFFFF");
-    }, SCALE_DURATION * 1000 + COLOR_CHANGE_DELAY * 1000);
-
-    // After background change, hide and finish intro
-    const totalDuration = (SCALE_DURATION + COLOR_CHANGE_DELAY + BG_CHANGE_DURATION + FADE_DURATION) * 1000;
+    // After second word appears, hide and finish intro
+    const totalDuration = (SCALE_DURATION + TEXT_CHANGE_DELAY + SECOND_WORD_EXPAND_DURATION + FADE_DURATION) * 1000;
     const hideTimer = setTimeout(() => {
       setVisible(false);
       setTimeout(() => setIntroFinished(true), FADE_DURATION * 1000);
@@ -44,7 +35,6 @@ function IntroSpotlightDesktop() {
     return () => {
       clearTimeout(showTimer);
       clearTimeout(textTimer);
-      clearTimeout(colorTimer);
       clearTimeout(hideTimer);
     };
   }, [setIntroFinished]);
@@ -54,12 +44,9 @@ function IntroSpotlightDesktop() {
       {visible && (
         <motion.section
           key="intro-desktop"
-          className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
-          initial={{ backgroundColor: "#EBEBEB" }}
-          animate={{ backgroundColor }}
+          className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-[#EBEBEB]"
           exit={{ opacity: 0 }}
           transition={{ 
-            backgroundColor: { duration: BG_CHANGE_DURATION },
             opacity: { duration: FADE_DURATION }
           }}
         >
@@ -71,14 +58,14 @@ function IntroSpotlightDesktop() {
               duration="normal"
             >
               <motion.h1
-                className="font-extrabold uppercase tracking-wide select-none text-[8rem] flex items-center whitespace-nowrap"
+                className="font-normal uppercase tracking-wide select-none text-[8rem] flex items-center whitespace-nowrap text-black"
                 initial={{ 
                   scale: 12,
-                  color: "#000000",
+                  color: "#00000033",
                 }}
                 animate={{ 
                   scale: 1,
-                  color: textColor,
+                  color: "#000000",
                 }}
                 transition={{
                   scale: {
@@ -86,24 +73,30 @@ function IntroSpotlightDesktop() {
                     ease: [0.42, 0, 0.58, 1],
                   },
                   color: {
-                    duration: BG_CHANGE_DURATION,
-                    delay: COLOR_CHANGE_DELAY,
+                    duration: SCALE_DURATION + 0.5,
                   },
                 }}
               >
                 <span>{INITIAL_WORD}</span>
                 {showSecondWord && (
                   <motion.span
-                    className="ml-4"
+                    className="ml-2 inline-block overflow-hidden whitespace-nowrap"
                     initial={{ 
                       opacity: 0,
+                      maxWidth: 0,
                     }}
                     animate={{ 
                       opacity: 1,
+                      maxWidth: "80vw",
                     }}
                     transition={{
                       opacity: {
                         duration: 0.3,
+                        delay: SECOND_WORD_EXPAND_DURATION * 0.5,
+                      },
+                      maxWidth: {
+                        duration: SECOND_WORD_EXPAND_DURATION,
+                        ease: [0.42, 0, 0.58, 1],
                       },
                     }}
                   >
